@@ -5,6 +5,7 @@ import java.util.Random;
 import de.htwsaar.esch.Codeopolis.DomainModel.Game.GrainType;
 import de.htwsaar.esch.Codeopolis.DomainModel.Harvest.*;
 import de.htwsaar.esch.Codeopolis.DomainModel.Plants.*;
+import de.htwsaar.esch.Codeopolis.DomainModel.Plants.Grain.Conditions;
 import de.htwsaar.esch.Codeopolis.Exceptions.*;
 
 /**
@@ -262,32 +263,24 @@ public class City extends GameEntity {
 
 		//Calculation of the harvest:
 		int[] harvested = new int[Game.GrainType.values().length];
-		Grain.Conditions thisYearsConditions = Grain.Conditions.generateRandomConditions();
-
-		boolean drought = thisYearsConditions.getDrought();
-		boolean fusarium = thisYearsConditions.getFusarium();
-		boolean leafDrought = thisYearsConditions.getLeafDrought();
-		boolean powderyMildew = thisYearsConditions.getPowderyMildew();
-		boolean barleyGoutFly = thisYearsConditions.getBarleyGoutFly();
-		boolean deliaFly = thisYearsConditions.getDeliaFly();
-		boolean fritFly = thisYearsConditions.getFritFly();
-		
+		Conditions thisYearsConditions = Conditions.generateRandomConditions();
+	
 		for(int i = 0; i< Game.GrainType.values().length; i++) {
 			if(this.planted[i] != null) {
 				this.planted[i].grow(thisYearsConditions);
-				if(drought)
+				if(thisYearsConditions.isDrought())
 					this.planted[i].drought();
-				if(fusarium)
+				if(thisYearsConditions.isFusarium())
 					this.planted[i].diseaseOutbreak(Grain.Diseases.Fusarium, thisYearsConditions);
-				if(leafDrought)
+				if(thisYearsConditions.isLeafDrought())
 					this.planted[i].diseaseOutbreak(Grain.Diseases.LeafDrought, thisYearsConditions);
-				if(powderyMildew)
+				if(thisYearsConditions.isPowderyMildew())
 					this.planted[i].diseaseOutbreak(Grain.Diseases.PowderyMildew, thisYearsConditions);
-				if(barleyGoutFly)
+				if(thisYearsConditions.isBarleyGoutFly())
 					this.planted[i].pestInfestation(Grain.Pests.BarleyGoutFly, thisYearsConditions);
-				if(deliaFly)
+				if(thisYearsConditions.isDeliaFly())
 					this.planted[i].pestInfestation(Grain.Pests.DeliaFly, thisYearsConditions);
-				if(fritFly)
+				if(thisYearsConditions.isFritFly())
 					this.planted[i].pestInfestation(Grain.Pests.FritFly, thisYearsConditions);
 				harvested[i] = this.planted[i].harvest();	
 			}

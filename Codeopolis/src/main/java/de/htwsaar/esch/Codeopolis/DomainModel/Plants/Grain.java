@@ -9,10 +9,10 @@ import java.util.Random;
 public abstract class Grain {
 
      public static class Conditions {
+
           private float soilConditions;
           private float averageTemperatureSummer;
           private float averageTemperatureWinter;
-
           private boolean drought;
           private boolean fusarium;
           private boolean leafDrought;
@@ -28,21 +28,13 @@ public abstract class Grain {
           * @param averageTemperatureSummer The average summer temperature (in degrees Celsius).
           * @param averageTemperatureWinter The average winter temperature (in degrees Celsius).
           */
-          public Conditions(float soilConditions, float averageTemperatureSummer, float averageTemperatureWinter, boolean drought, 
-                              boolean fusarium, boolean leafDrought, boolean powderyMildew, boolean barleyGoutFly, boolean deliaFly, boolean fritFly) {
+          public Conditions(float soilConditions, float averageTemperatureSummer, float averageTemperatureWinter ) {
                this.soilConditions = soilConditions;
                this.averageTemperatureSummer = averageTemperatureSummer;
                this.averageTemperatureWinter = averageTemperatureWinter;
-               this.drought = drought;
-               this.fusarium = fusarium;
-               this.leafDrought = leafDrought;
-               this.powderyMildew = powderyMildew;
-               this.barleyGoutFly = barleyGoutFly;
-               this.deliaFly = deliaFly;
-               this.fritFly = fritFly;
           }
           
-          /**
+         /**
           * Gets the soil conditions affecting plant growth.
           *
           * @return The soil conditions (a float value between 0.0 and 1.0).
@@ -50,8 +42,8 @@ public abstract class Grain {
           public float getSoilConditions() {
                return soilConditions;
           }
-
-          /**
+     
+         /**
           * Gets the average summer temperature.
           *
           * @return The average summer temperature (in degrees Celsius).
@@ -59,8 +51,8 @@ public abstract class Grain {
           public float getAverageTemperatureSummer() {
                return averageTemperatureSummer;
           }
-
-          /**
+     
+         /**
           * Gets the average winter temperature.
           *
           * @return The average winter temperature (in degrees Celsius).
@@ -68,34 +60,71 @@ public abstract class Grain {
           public float getAverageTemperatureWinter() {
                return averageTemperatureWinter;
           }
-
-          public boolean getDrought() {
-               return drought;
+          
+          /**
+           * Gets the drought condition affecting plant growth.
+           *
+           * @return true if there is a drought condition, false otherwise.
+           */
+          public boolean isDrought() {
+              return drought;
           }
-
-          public boolean getFusarium() {
-               return fusarium;
+     
+          /**
+           * Gets the fusarium condition affecting plant growth.
+           *
+           * @return true if there is a fusarium condition, false otherwise.
+           */
+          public boolean isFusarium() {
+              return fusarium;
           }
-
-          public boolean getLeafDrought() {
-               return leafDrought;
+     
+          /**
+           * Gets the leaf drought condition affecting plant growth.
+           *
+           * @return true if there is a leaf drought condition, false otherwise.
+           */
+          public boolean isLeafDrought() {
+              return leafDrought;
           }
-
-          public boolean getPowderyMildew() {
-               return powderyMildew;
+     
+          /**
+           * Gets the powdery mildew condition affecting plant growth.
+           *
+           * @return true if there is a powdery mildew condition, false otherwise.
+           */
+          public boolean isPowderyMildew() {
+              return powderyMildew;
           }
-
-          public boolean getBarleyGoutFly() {
-               return barleyGoutFly;
+     
+          /**
+           * Gets the barley gout fly condition affecting plant growth.
+           *
+           * @return true if there is a barley gout fly condition, false otherwise.
+           */
+          public boolean isBarleyGoutFly() {
+              return barleyGoutFly;
           }
-
-          public boolean getDeliaFly() {
-               return deliaFly;
+     
+          /**
+           * Gets the delia fly condition affecting plant growth.
+           *
+           * @return true if there is a delia fly condition, false otherwise.
+           */
+          public boolean isDeliaFly() {
+              return deliaFly;
           }
-
-          public boolean getFritFly() {
-               return fritFly;
+     
+          /**
+           * Gets the frit fly condition affecting plant growth.
+           *
+           * @return true if there is a frit fly condition, false otherwise.
+           */
+          public boolean isFritFly() {
+              return fritFly;
           }
+     
+     
           
           /**
            * Factory method to create a new Conditions object with random values for all fields.
@@ -107,20 +136,21 @@ public abstract class Grain {
                float soilConditions = random.nextFloat(); // generates a random float value between 0.0 (inclusive) and 1.0 (exclusive)
                float averageTemperatureSummer = random.nextFloat() * 30.0f; // generates a random float value between 0.0 (inclusive) and 30.0 (exclusive)
                float averageTemperatureWinter = random.nextFloat() * 20.0f - 10.0f; // generates a random float value between -10.0 (inclusive) and 10.0 (exclusive)
-               boolean drought = random.nextBoolean();
-               boolean fusarium = random.nextBoolean();
-               boolean leafDrought = random.nextBoolean();
-               boolean powderyMildew = random.nextBoolean();
-               boolean barleyGoutFly = random.nextBoolean();
-               boolean deliaFly = random.nextBoolean();
-               boolean fritFly = random.nextBoolean();
-               return new Conditions(soilConditions, averageTemperatureSummer, averageTemperatureWinter, drought, 
-                                             fusarium, leafDrought, powderyMildew, barleyGoutFly, deliaFly, fritFly);
+     
+               Conditions newConditions = new Conditions(soilConditions, averageTemperatureSummer, averageTemperatureWinter);
+               
+               newConditions.drought = random.nextFloat() > 0.8 ? true : false;
+               newConditions.fusarium = random.nextFloat() > 0.8 ? true : false;
+               newConditions.leafDrought = random.nextFloat() > 0.8 ? true : false;
+               newConditions.powderyMildew = random.nextFloat() > 0.8 ? true : false;
+               newConditions.barleyGoutFly = random.nextFloat() > 0.8 ? true : false;
+               newConditions.deliaFly = random.nextFloat() > 0.8 ? true : false;
+               newConditions.fritFly = random.nextFloat() > 0.8 ? true : false;
+               
+               return newConditions;
           }
      }
 
-
-	
 	public enum Pests{FritFly, DeliaFly, BarleyGoutFly};
 	
 	public enum Diseases{PowderyMildew, LeafDrought, Fusarium}
