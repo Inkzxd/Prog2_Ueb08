@@ -306,7 +306,40 @@ public class Depot {
 	 */
 	@Override
 	public String toString() {
-	    DepotVisualizer result = new DepotVisualizer();
+	   class DepotVisualizer {
+            private StringBuilder visualRepresentation = new StringBuilder();
+            private DecimalFormat df = new DecimalFormat("0.00");
+
+            // Methode zur Hinzufügung von Silo-Informationen zur Darstellung
+            public void appendSiloInfo(Silo silo) {
+                visualRepresentation.append("Silo ").append(silo.getGrainType() != null ? silo.getGrainType() : "EMPTY").append("\n");
+                visualRepresentation.append("Amount of Grain: ").append(silo.getFillLevel()).append(" units\n");
+
+                int capacity = silo.getCapacity();
+                double fillPercentage = (double) silo.getFillLevel() / capacity * 100;
+
+                // ASCI-ART representation of the fill level
+                int fillBarLength = 20;
+                int filledBars = (int) (fillPercentage / 100 * fillBarLength);
+                int emptyBars = fillBarLength - filledBars;
+
+                visualRepresentation.append("|");
+                for (int j = 0; j < filledBars; j++) {
+                    visualRepresentation.append("=");
+                }
+                for (int j = 0; j < emptyBars; j++) {
+                    visualRepresentation.append("-");
+                }
+                visualRepresentation.append("| ").append(df.format(fillPercentage)).append("% filled\n");
+                visualRepresentation.append("Capacity: ").append(capacity).append(" units\n\n");
+            }
+
+            // Methode zur Visualisierung der gesammelten Informationen
+            public String visualize() {
+                return visualRepresentation.toString();
+            }
+        }
+        DepotVisualizer result = new DepotVisualizer();
         for (Silo silo : silos) {
             result.appendSiloInfo(silo);
         }
@@ -333,39 +366,36 @@ public class Depot {
     }
 
     private class DepotIterator implements Iterator {
-        private int index = 0;
+        private Game.GrainType grainType;
+        private int currentIndex;
 
-        public DepotIterator(GrainType grainType) {
-           // TODO
+        public DepotIterator(Game.GrainType grainType) {
+            this.grainType = grainType;
+            this.currentIndex = findNextIndex(0);
         }
 
         @Override
         public boolean hasNext() {
-            return index < silos.length;
+            return currentIndex != -1;
         }
 
         @Override
         public Silo.Status next() {
             if (!hasNext()) {
-                throw new NoSuchElementException("No more elements available");
+                throw new NoSuchElementException();
             }
-            return silos[index++].getStatus();
-        }
-    }
-
-    public class DepotVisualizer {
-        private final Depot depot;
-
-        public DepotVisualizer() {
-            this.depot = Depot.this;
+            Silo.Status status = silos[currentIndex].getStatus();
+            currentIndex = findNextIndex(currentIndex + 1);
+            return status;
         }
 
-        public void appendSiloInfo(Silo silo) {
-            System.out.println(silo.getStatus());
-        }
-
-        public String visualize() {
-           return "";
+        private int findNextIndex(int start) {
+            for (int i = start; i < silos.length; i++) {
+                if (silos[i].getGrainType() == grainType) {
+                    return i;
+                }
+            }
+            return -1;
         }
     }
 }
