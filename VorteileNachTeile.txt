@@ -1,0 +1,21 @@
+Aufgabe 1
+    Vorteile statische innere Klasse:
+        Hilft bei Strukturierung:
+            Logische Gruppierung der Klassen
+            Dienen als Hilfsklassen, die dort definiert werden, wo sie benötigt werden 
+            Inhaltlich verwandte Aspekte werden an einem Ort gebündelt
+        Kapselung
+            Verbessert das Verbergen von Methoden und Variablen nach außen hin 
+        Lesbarkeit
+            Code steht dort, wo er verwendet wird, besonders bei kleinen Hilfsklassen sinnvoll
+
+    Nachteile statische innere Klasse:
+        Kann nicht auf nicht-statische Methoden und Attribute der äußeren Klasse zugreifen
+
+Aufgabe 2
+
+
+Aufgabe 3
+
+
+Aufgabe 4

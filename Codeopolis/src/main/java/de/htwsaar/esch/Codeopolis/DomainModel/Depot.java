@@ -1,6 +1,5 @@
 package de.htwsaar.esch.Codeopolis.DomainModel;
 
-import de.htwsaar.esch.Codeopolis.DomainModel.Game.GrainType;
 import de.htwsaar.esch.Codeopolis.DomainModel.Harvest.*;
 
 import java.text.DecimalFormat;
