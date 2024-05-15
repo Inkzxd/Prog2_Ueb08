@@ -16,6 +16,13 @@ Aufgabe 2
 
 
 Aufgabe 3
+    Vorteile lokale Klassen:
+        Nur innerhalb der Methode verwendbar, wird so nicht versehentlich anderswo verwendet
+        Kann auf lokale Variablen der umfassenden Methode zugreifen
+        Logische Strukturierung des Codes, da die Klasse nur dort definiert ist, wo sie benötigt wird
 
+    Nachteile lokale Klassen:
+        Können nur auf konstante Variablen der umfassenden Methode zugreifen
 
 Aufgabe 4
+    Die annonyme Klasse ist nur an einer bestimmten Stelle des Codes bedeutsam und nicht sonderlich lang, weshalb es Sinn macht, sie annonym zu implementieren.
