@@ -388,10 +388,13 @@ public class Depot {
             if (!hasNext()) {
                 throw new NoSuchElementException();
             }
-            Silo currentSilo = silos[currentIndex];
-            currentIndex++;
-            return currentSilo.getStatus();
+            for (Silo silo : silos) {
+                if (silo.getGrainType() == grainType) {
+                    currentIndex++;
+                    return silo.getStatus();
+                }
+            }
+            return null;
         }
-        
     }
 }
