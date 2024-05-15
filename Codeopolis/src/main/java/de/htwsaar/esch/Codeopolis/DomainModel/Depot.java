@@ -1,5 +1,6 @@
 package de.htwsaar.esch.Codeopolis.DomainModel;
 
+import de.htwsaar.esch.Codeopolis.DomainModel.Game.GrainType;
 import de.htwsaar.esch.Codeopolis.DomainModel.Harvest.*;
 
 import java.text.DecimalFormat;
@@ -345,6 +346,10 @@ public class Depot {
         return result.visualize();
 	}
 
+    public Iterator iterator(Game.GrainType grainType) {
+        return new DepotIterator(grainType);
+    }
+
     public interface Iterator {
         /**
          * Checks if there are further objects available for iteration.
@@ -365,17 +370,17 @@ public class Depot {
     }
 
     private class DepotIterator implements Iterator {
-        private Game.GrainType grainType;
-        private int currentIndex;
 
-        public DepotIterator(Game.GrainType grainType) {
+        private int currentIndex;
+        private GrainType grainType;
+
+        public DepotIterator(GrainType grainType) {
             this.grainType = grainType;
-            this.currentIndex = findNextIndex(0);
         }
 
         @Override
         public boolean hasNext() {
-            return currentIndex != -1;
+            return currentIndex < silos.length;
         }
 
         @Override
@@ -383,18 +388,10 @@ public class Depot {
             if (!hasNext()) {
                 throw new NoSuchElementException();
             }
-            Silo.Status status = silos[currentIndex].getStatus();
-            currentIndex = findNextIndex(currentIndex + 1);
-            return status;
+            Silo currentSilo = silos[currentIndex];
+            currentIndex++;
+            return currentSilo.getStatus();
         }
-
-        private int findNextIndex(int start) {
-            for (int i = start; i < silos.length; i++) {
-                if (silos[i].getGrainType() == grainType) {
-                    return i;
-                }
-            }
-            return -1;
-        }
+        
     }
 }

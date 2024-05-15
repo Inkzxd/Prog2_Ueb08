@@ -143,75 +143,71 @@ public class City extends GameEntity {
      * @param acres The number of acres to plant.
      * @return True if the planting was successful, false otherwise.
      */
-	public void plant(int[] acres) throws InsufficientResourcesException, LandOperationException {
-        int acresSum = 0;
-        for (GrainType grainType : GrainType.values()) {
-            int i = grainType.ordinal();
-            acresSum += acres[i];
-            if (acres[i] * this.config.getBushelsPerAcre() > this.depot.getFillLevel(grainType)) {
-                throw new InsufficientResourcesException(
-                        "Not enough bushels to plant " + acres[i] + " acres of grain type " + grainType,
-                        acres[i] * this.config.getBushelsPerAcre(),
-                        this.depot.getFillLevel(grainType)
-                );
-            }
-        }
-        if (acresSum > this.acres) {
-            throw new LandOperationException(
-                    "Attempting to plant " + acresSum + " acres, but only " + this.acres + " acres are available."
-            );
-        }
+	public void plant(int[] acres) throws InsufficientResourcesException, LandOperationException{
+		int acresSum = 0;
+		Random rand = new Random();
+		for (GrainType grainType : GrainType.values()) {
+	        int i = grainType.ordinal();
+			acresSum += acres[i];
+			if(acres[i] * this.config.getBushelsPerAcre() > this.depot.getFillLevel(grainType))
+				throw new InsufficientResourcesException(
+		                "Not enough bushels to plant " + acres[i] + " acres of grain type " + grainType,
+		                acres[i] * this.config.getBushelsPerAcre(), 
+		                this.depot.getFillLevel(grainType)
+		            );
+		}
+		if(acresSum > this.acres) 
+			throw new LandOperationException(
+		            "Attempting to plant " + acresSum + " acres, but only " + this.acres + " acres are available."
+		        );
 
-        if (acresSum > this.config.getAcrePerResident() * this.residents) {
-            throw new LandOperationException(
-                    "Not enough residents to plant " + acresSum + " acres. You can plant " + this.config.getAcrePerResident() + " acres per resident."
-            );
-        }
+		if(acresSum > this.config.getAcrePerResident() * this.residents) 
+			throw new LandOperationException(
+		            "Not enough residents to plant " + acresSum + " acres. You can plant "+this.config.getAcrePerResident()+" acres per resident."
+		        );
 
-        for (GrainType grainType : GrainType.values()) {
-            int grainTypeIndex = grainType.ordinal(); // Get the ordinal index of the enum
-            if (acres[grainTypeIndex] > 0) {
-                Grain seed = null;
-
-                // Plant special wheat with double yield (10% probability)
-                if (grainType == GrainType.WHEAT && fortune.nextDouble() < 0.1) {
-                    seed = new Wheat() {
-                        @Override
-                        public int harvest() {
-                            // Double the harvest for special wheat
-                            return super.harvest() * 2;
-                        }
-                    };
-                } else {
-                    // Normal planting for other grain types
-                    switch (grainType) {
-                        case BARLEY:
-                            seed = new Barley();
-                            break;
-                        case CORN:
-                            seed = new Corn();
-                            break;
-                        case MILLET:
-                            seed = new Millet();
-                            break;
-                        case RICE:
-                            seed = new Rice();
-                            break;
-                        case RYE:
-                            seed = new Rye();
-                            break;
-                        case WHEAT:
-                            seed = new Wheat();
-                            break;
-                    }
-                }
-
-                seed.plant(acres[grainTypeIndex]);
-                this.planted[grainTypeIndex] = seed;
-                this.depot.takeOut(acres[grainTypeIndex] * this.config.getBushelsPerAcre(), grainType);
-            }
-        }
-    }
+		Grain seed = null;
+		for (GrainType grainType : GrainType.values()) {
+			int grainTypeIndex = grainType.ordinal(); // Get the ordinal index of the enum
+			if (grainType == GrainType.WHEAT && rand.nextDouble() <= 0.1) {
+				seed = new Wheat() {
+					@Override
+					public void grow(Conditions conditions) {
+						super.grow(conditions);
+						this.yieldRatio *= 2;
+					}
+				};
+			} else {
+				switch (grainType) {
+					case BARLEY:
+						seed = new Barley();
+						break;
+					case CORN:
+						seed = new Corn();
+						break;
+					case MILLET:
+						seed = new Millet();
+						break;
+					case RICE:
+						seed = new Rice();
+						break;
+					case RYE:
+						seed = new Rye();
+						break;
+					case WHEAT:
+						seed = new Wheat();
+						break;
+					// No default case needed as we are covering all enum constants
+			}
+			}
+			if(acres[grainTypeIndex] > 0 && seed != null) {
+				seed.plant(acres[grainTypeIndex]);
+				this.planted[grainTypeIndex] = seed;
+				this.depot.takeOut(acres[grainTypeIndex] * this.config.getBushelsPerAcre(), grainType);
+			}
+		}
+	}
+	
 
 	
 	/**

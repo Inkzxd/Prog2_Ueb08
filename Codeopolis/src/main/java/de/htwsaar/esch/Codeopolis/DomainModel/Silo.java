@@ -217,13 +217,11 @@ public class Silo implements Serializable{
         private final int currentCapacity;
         private final int currentFillLevel;
 
-        // Private constructor to prevent external instantiation
         private Status() {
             this.currentCapacity = capacity;
             this.currentFillLevel = fillLevel;
         }
-
-        // Public getters for immutable access
+        
         public int getCurrentCapacity() {
             return currentCapacity;
         }
