@@ -206,7 +206,7 @@ public class Depot {
     public void defragment() {
         LinkedList<Harvest> allHarvests = new LinkedList<>();
 
-        int index = 0;
+        //int index = 0;
         for (int i = 0; i < silos.size(); i++) {
             LinkedList<Harvest> siloHarvests = silos.get(i).emptySilo();
             if(siloHarvests != null) {
@@ -229,13 +229,13 @@ public class Depot {
      *
      * @return The total count of harvests stored in all silos combined.
      */
-    private int getTotalHarvestCount() {
+    /*private int getTotalHarvestCount() {
         int totalCount = 0;
         for (int i = 0; i < silos.size(); i++) {
             totalCount += silos.get(i).getHarvestCount();
         }
         return totalCount;
-    }
+    }*/
 
     /**
      * Simulates the decay of grain in the depot over time.
