@@ -1,7 +1,7 @@
 package de.htwsaar.esch.Codeopolis.DomainModel;
 
+import java.util.Iterator;
 import java.util.NoSuchElementException;
-import java.util.function.Consumer;
 
 /**
  * Klasse LinkedList mit generischem Typ T
@@ -150,13 +150,50 @@ public class LinkedList<T> {
      * Methode zum Iterieren über die Liste
      * @param consumer Consumer, der das Element akzeptiert
      */
-    public void iterator (Consumer<T> consumer) {
+    public Iterator<T> iterator() {
+        return new Iterator<T>() {
+            private Node current = head;
+
+            @Override
+            public boolean hasNext() {
+                return current != null;
+            }
+
+            @Override
+            public T next() {
+                if (current == null) {
+                    throw new NoSuchElementException();
+                }
+                T data = current.data;
+                current = current.next;
+                return data;
+            }
+        };
+    }
+
+    /**
+     * Methode zum Sortieren der Liste mit BubbleSort
+     * @return sortedList sortierte Liste
+     */
+    public LinkedList<T> bubbleSort() {
+        LinkedList<T> sortedList = new LinkedList<>();
         Node current = head;
         while (current != null) {
-            consumer.accept(current.data);
+            sortedList.addLast(current.data);
             current = current.next;
         }
+        for (int i = 1; i < sortedList.size(); i++) {
+            for (int j = 0; j < sortedList.size() - i; j++) {
+                if (sortedList.get(j).hashCode() > sortedList.get(j + 1).hashCode()){
+                    T temp = sortedList.get(j);
+                    sortedList.set(j, sortedList.get(j + 1));
+                    sortedList.set(j + 1, temp);
+                }
+            }
+        }
+        return sortedList;
     }
+
 
     /**
      * Methode zur Ausgabe der Liste als String
