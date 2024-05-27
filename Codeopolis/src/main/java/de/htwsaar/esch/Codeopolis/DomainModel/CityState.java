@@ -174,7 +174,4 @@ public class CityState implements Serializable{
                 Arrays.equals(bushels, other.bushels) &&
                 Arrays.equals(silos, other.silos);
     }
-
-
-
 }

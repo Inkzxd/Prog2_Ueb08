@@ -53,7 +53,7 @@ public class City extends GameEntity {
         this.residents = cityState.getResidents();
         this.year = cityState.getYear();
 
-        this.depot = new Depot(cityState.getSilos());  
+        // TODO this.depot = new Depot(cityState.getSilos());  
     }
 
     
@@ -338,7 +338,7 @@ public class City extends GameEntity {
      * @return The CityState object representing the current state.
      */
 	public CityState getState() {
-		return new CityState(this.name, this.getId(), this.residents, this.depot.getBushelsCategorizedByGrainType(), this.acres, this.year, this.depot.totalCapacity() - this.depot.getTotalFillLevel(), this.depot.getSilos());
+		return null; // TODO new CityState(this.name, this.getId(), this.residents, this.depot.getBushelsCategorizedByGrainType(), this.acres, this.year, this.depot.totalCapacity() - this.depot.getTotalFillLevel(), this.depot.getSilos());
 	}
 
 	/**

@@ -209,7 +209,7 @@ public class LinkedList<T> {
         T temp;
         for (int i = 0; i < size; i++) {
             for (int j = i + 1; j < size; j++) {
-                if (get(i).hashCode() > get(j).hashCode() && get(j).hashCode() > 0) {
+                if (get(i).toString().compareTo(get(j).toString()) > 0) {
                     temp = get(i);
                     set(i, get(j));
                     set(j, temp);
