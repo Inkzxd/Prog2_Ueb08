@@ -1,48 +1,50 @@
 package de.htwsaar.esch.Codeopolis.DomainModel;
 
-import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * Klasse LinkedList mit generischem Typ T
- * Beinhält Methoden zum Hinzufügen, Entfernen, Setzen, Leeren, Größe und Iterieren
- * Beinhalet eine innere Klasse Node
- * @author Christian Petry
- * @version 1.0
+ * A generic singly linked list implementation.
+ *
+ * @param <T> the type of elements in this list
  */
 public class LinkedList<T> {
+    private Node<T> head; // The head (first node) of the list
+    private int size; // The number of elements in the list
 
-    // Attribute
-    private Node head;
-    private int size;
+    /**
+     * Constructs an empty list.
+     */
+    public LinkedList() {
+        this.head = null;
+        this.size = 0;
+    }
 
-    // Innere Klasse Node
-    public class Node {
-        T data;
-        Node next;
-        
-        public Node(T data) {
+    /**
+     * Node class representing each element in the linked list.
+     *
+     * @param <T> the type of data stored in the node
+     */
+    private static class Node<T> {
+        T data; // The data stored in the node
+        Node<T> next; // The reference to the next node in the list
+
+        Node(T data) {
             this.data = data;
             this.next = null;
         }
     }
 
-    // Standardkonstruktor, initialisiert head mit null und size mit 0
-    public LinkedList() {
-        this.head = null;
-        this.size = 0;
-    }
-    
     /**
-     * Methode zum Hinzufügen eines Elements am Ende der Liste
-     * @param data Element, das hinzugefügt werden soll
+     * Adds an element to the end of the list.
+     *
+     * @param data the element to be added
      */
     public void addLast(T data) {
-        Node newNode = new Node(data);
+        Node<T> newNode = new Node<>(data);
         if (head == null) {
             head = newNode;
         } else {
-            Node current = head;
+            Node<T> current = head;
             while (current.next != null) {
                 current = current.next;
             }
@@ -52,45 +54,49 @@ public class LinkedList<T> {
     }
 
     /**
-     * Methode zum Entfernen des Elements am Anfang der Liste
-     * @return data Element, das entfernt wurde
+     * Removes and returns the first element of the list.
+     *
+     * @return the removed element
+     * @throws NoSuchElementException if the list is empty
      */
     public T removeFirst() {
         if (head == null) {
-            throw new NoSuchElementException();
+            throw new NoSuchElementException("The list is empty.");
         }
-        Node current = head;
+        T data = head.data;
         head = head.next;
         size--;
-        return current.data;
+        return data;
     }
 
     /**
-     * Methode zum Überprüfen, ob die Liste leer ist
-     * @return true, wenn die Liste leer ist, sonst false
+     * Checks if the list is empty.
+     *
+     * @return true if the list is empty, false otherwise
      */
     public boolean isEmpty() {
-        return head == null;
+        return size == 0;
     }
 
     /**
-     * Methode zur Ausgabe der Größe der Liste
-     * @return size Größe der Liste
+     * Returns the number of elements in the list.
+     *
+     * @return the size of the list
      */
     public int size() {
         return size;
     }
 
     /**
-     * Methode zur Ausgabe eines Elements an einem bestimmten Index
-     * @param index Index des Elements
-     * @return data Element an dem Index
+     * Returns the element at the specified position in the list.
+     *
+     * @param index the index of the element to return
+     * @return the element at the specified position
+     * @throws IndexOutOfBoundsException if the index is out of range
      */
     public T get(int index) {
-        if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException();
-        }
-        Node current = head;
+        checkIndex(index);
+        Node<T> current = head;
         for (int i = 0; i < index; i++) {
             current = current.next;
         }
@@ -98,118 +104,104 @@ public class LinkedList<T> {
     }
 
     /**
-     * Methode zum ersetzten eines Elements an einem bestimmten Index
-     * @param index Index des Elements
-     * @param data neues Element
-     * @return oldData altes Element
-     */ 
-    public T set (int index, T data) {
-        if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException();
-        }
-        Node current = head;
+     * Replaces the element at the specified position in the list with the specified element.
+     *
+     * @param index   the index of the element to replace
+     * @param newData the element to be stored at the specified position
+     * @return the element previously at the specified position
+     * @throws IndexOutOfBoundsException if the index is out of range
+     */
+    public T set(int index, T newData) {
+        checkIndex(index);
+        Node<T> current = head;
         for (int i = 0; i < index; i++) {
             current = current.next;
         }
         T oldData = current.data;
-        current.data = data;
+        current.data = newData;
         return oldData;
     }
 
     /**
-     * Methode zum Leeren der Liste
+     * Removes all elements from the list.
      */
-    public void clear () {
+    public void clear() {
         head = null;
         size = 0;
     }
 
     /**
-     * Methode zum Entfernen eines Elements an einem bestimmten Index
-     * @param index Index des Elements
-     * @return removeNode Element, das entfernt wurde
+     * Removes and returns the element at the specified position in the list.
+     *
+     * @param index the index of the element to be removed
+     * @return the element previously at the specified position
+     * @throws IndexOutOfBoundsException if the index is out of range
      */
-    public T remove (int index) {
-        if (index < 0 || index >= size) {
-            throw new IndexOutOfBoundsException();
-        }
+    public T remove(int index) {
+        checkIndex(index);
         if (index == 0) {
             return removeFirst();
         }
-        Node current = head;
+        Node<T> current = head;
         for (int i = 0; i < index - 1; i++) {
             current = current.next;
         }
-        Node removeNode = current.next;
-        current.next = removeNode.next;
+        T data = current.next.data;
+        current.next = current.next.next;
         size--;
-        return removeNode.data;
+        return data;
     }
 
     /**
-     * Methode zum Iterieren über die Liste
-     * @param consumer Consumer, der das Element akzeptiert
+     * Returns an iterator over the elements in this list.
+     *
+     * @return an iterator over the elements in this list
      */
-    public Iterator<T> iterator() {
-        return new Iterator<T>() {
-            private Node current = head;
-
-            @Override
-            public boolean hasNext() {
-                return current != null;
-            }
-
-            @Override
-            public T next() {
-                if (current == null) {
-                    throw new NoSuchElementException();
-                }
-                T data = current.data;
-                current = current.next;
-                return data;
-            }
-        };
+    public LinkedListIterator iterator() {
+        return new LinkedListIterator();
     }
 
     /**
-     * Methode zum Sortieren der Liste mit BubbleSort
-     * @return sortedList sortierte Liste
+     * Checks if the index is in range.
+     *
+     * @param index the index to check
+     * @throws IndexOutOfBoundsException if the index is out of range
      */
-    public LinkedList<T> bubbleSort() {
-        LinkedList<T> sortedList = new LinkedList<>();
-        Node current = head;
-        while (current != null) {
-            sortedList.addLast(current.data);
+    private void checkIndex(int index) {
+        if (index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+    }
+
+    /**
+     * An iterator over the elements in the list.
+     */
+    public class LinkedListIterator {
+        private Node<T> current = head; // The current node in the iteration
+
+        /**
+         * Checks if the iteration has more elements.
+         *
+         * @return true if the iteration has more elements, false otherwise
+         */
+        public boolean hasNext() {
+            return current != null;
+        }
+
+        /**
+         * Returns the next element in the iteration.
+         *
+         * @return the next element in the iteration
+         * @throws NoSuchElementException if the iteration has no more elements
+         */
+        public T next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+            T data = current.data;
             current = current.next;
+            return data;
         }
-        for (int i = 1; i < sortedList.size(); i++) {
-            for (int j = 0; j < sortedList.size() - i; j++) {
-                if (sortedList.get(j).hashCode() > sortedList.get(j + 1).hashCode()){
-                    T temp = sortedList.get(j);
-                    sortedList.set(j, sortedList.get(j + 1));
-                    sortedList.set(j + 1, temp);
-                }
-            }
-        }
-        return sortedList;
     }
 
-
-    /**
-     * Methode zur Ausgabe der Liste als String
-     */
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("[");
-        Node current = head;
-        while (current != null) {
-            sb.append(current.data);
-            if (current.next != null) {
-                sb.append(", ");
-            }
-            current = current.next;
-        }
-        sb.append("]");
-        return sb.toString();
-    }
 }
