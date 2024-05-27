@@ -204,4 +204,49 @@ public class LinkedList<T> {
         }
     }
 
+    public LinkedList<T> sort () {
+        LinkedList<T> sortedList = new LinkedList<>();
+        T temp;
+        for (int i = 0; i < size; i++) {
+            for (int j = i + 1; j < size; j++) {
+                if (get(i).hashCode() > get(j).hashCode() && get(j).hashCode() > 0) {
+                    temp = get(i);
+                    set(i, get(j));
+                    set(j, temp);
+                }
+            }
+        }
+        return sortedList;
+    }
+    
+    public String toString () {
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        Node<T> current = head;
+        while (current != null) {
+            sb.append(current.data);
+            if (current.next != null) {
+                sb.append(", ");
+            }
+            current = current.next;
+        }
+        sb.append("]");
+        return sb.toString();
+    }
+
+    public static void main (String[] args) {
+        LinkedList<Integer> list = new LinkedList<>();
+        list.addLast(5);
+        list.addLast(3);
+        list.addLast(8);
+        list.addLast(1);
+        list.addLast(2);
+        list.addLast(7);
+        list.addLast(4);
+        list.addLast(6);
+        System.out.println("Original list: " + list);
+        list.sort();
+        System.out.println("Sorted list: " + list);
+    }
+
 }

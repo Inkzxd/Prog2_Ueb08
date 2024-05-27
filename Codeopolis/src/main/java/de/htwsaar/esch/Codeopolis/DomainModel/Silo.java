@@ -59,9 +59,9 @@ public class Silo implements Serializable{
             return harvest; // The silo is already full, cannot be stored
         }
         
-        if (this.stockIndex == stock.size()-1) {
+        /*if (this.stockIndex == stock.size()-1) {
             extendStock();
-        }
+        }*/
         
         if(fillLevel < capacity) {
 	        // Check if the entire harvest can be stored
@@ -112,14 +112,15 @@ public class Silo implements Serializable{
     /**
      * Extends the capacity of the stock list.
      */
-    private void extendStock() {
+    /*private void extendStock() {
         int newCapacity = capacity * 2;
         LinkedList<Harvest> newStock = new LinkedList<>();
         for (int i = 0; i < stock.size(); i++) {
             newStock.addLast(stock.get(i));
         }
         stock = newStock;
-    }
+    }*/
+
     /**
      * Takes out a specified amount of grain from the silo.
      *
