@@ -11,6 +11,24 @@ public class Silo implements Serializable{
     private final int capacity;
     private int fillLevel;
 
+    public class Status {
+        private final int currentCapacity;
+        private final int currentFillLevel;
+
+        private Status() {
+            this.currentCapacity = capacity;
+            this.currentFillLevel = fillLevel;
+        }
+
+        public int getCurrentCapacity() {
+            return currentCapacity;
+        }
+
+        public int getCurrentFillLevel() {
+            return currentFillLevel;
+        }
+    }
+
     /**
      * Constructs a Silo object with the specified initial capacity.
      *
@@ -171,23 +189,5 @@ public class Silo implements Serializable{
 
     public Status getStatus() {
         return new Status();
-    }
-
-    public class Status {
-        private final int currentCapacity;
-        private final int currentFillLevel;
-
-        private Status() {
-            this.currentCapacity = capacity;
-            this.currentFillLevel = fillLevel;
-        }
-
-        public int getCurrentCapacity() {
-            return currentCapacity;
-        }
-
-        public int getCurrentFillLevel() {
-            return currentFillLevel;
-        }
     }
 }
