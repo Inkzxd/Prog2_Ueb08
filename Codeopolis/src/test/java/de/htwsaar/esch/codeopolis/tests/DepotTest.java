@@ -54,8 +54,8 @@ public class DepotTest {
     @Test
     public void testExpand() {
         depot.expand(2, 1500);
-        assertEquals(3000, depot.getCapacity(Game.GrainType.WHEAT));
-        assertEquals(3000, depot.getCapacity(Game.GrainType.CORN));
+        assertEquals(6000, depot.getCapacity(Game.GrainType.WHEAT));
+        assertEquals(6000, depot.getCapacity(Game.GrainType.CORN));
     }
 
   
