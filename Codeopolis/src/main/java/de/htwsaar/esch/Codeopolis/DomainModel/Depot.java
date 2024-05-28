@@ -6,7 +6,6 @@ import java.util.NoSuchElementException;
 
 public class Depot {
     private LinkedList<Silo> silos;
-    private LinkedList<Silo>.LinkedListIterator siloIterator;
 
     /**
      * Constructs a Depot object with the specified number of silos and capacity per silo.
@@ -16,7 +15,6 @@ public class Depot {
      */
     public Depot(int numberOfSilos, int capacityPerSilo) {
         this.silos = new LinkedList<>();
-        this.siloIterator = silos.iterator();
         for (int i = 0; i < numberOfSilos; i++) {
             this.silos.addLast(new Silo(capacityPerSilo));
         }
@@ -217,7 +215,6 @@ public class Depot {
     public void defragment() {
         LinkedList<Harvest> allHarvests = new LinkedList<>();
 
-        int index = 0;
         for (int i = 0; i < silos.size(); i++) {
             LinkedList<Harvest> siloHarvests = silos.get(i).emptySilo();
             if(siloHarvests != null) {
@@ -470,5 +467,4 @@ public class Depot {
             return status;
         }
     }
-
 }
