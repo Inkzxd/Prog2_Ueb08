@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import de.htwsaar.esch.Codeopolis.DomainModel.Game;
 import de.htwsaar.esch.Codeopolis.DomainModel.Silo;
 import de.htwsaar.esch.Codeopolis.DomainModel.Game.GrainType;
+import de.htwsaar.esch.Codeopolis.DomainModel.LinkedList;
 import de.htwsaar.esch.Codeopolis.DomainModel.Harvest.*;
 
 public class SiloTests {
@@ -50,9 +51,9 @@ public class SiloTests {
         silo.store(cornHarvest);
         silo.store(cornHarvest2);
 
-        Harvest[] removedHarvests = silo.emptySilo();
+        LinkedList<Harvest> removedHarvests = silo.emptySilo();
 
-        assertEquals(2, removedHarvests.length); // Two harvests removed
+        assertEquals(2, removedHarvests.size()); // Two harvests removed
         assertEquals(0, silo.getFillLevel()); // Silo empty
     }
 
