@@ -172,6 +172,6 @@ public class CityState implements Serializable{
                 year == other.year &&
                 name.equals(other.name) &&
                 Arrays.equals(bushels, other.bushels) &&
-                Arrays.equals(silos.toArray(), other.silos.toArray());
+                silos.equals(other.silos);
     }
 }

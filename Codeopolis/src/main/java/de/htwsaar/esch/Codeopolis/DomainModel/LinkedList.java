@@ -233,14 +233,4 @@ public class LinkedList<T extends Comparable<T>> {
         sb.append("]");
         return sb.toString();
     }
-
-    public long[] toArray() {
-        long[] array = new long[size];
-        Node<T> current = head;
-        for (int i = 0; i < size; i++) {
-            array[i] = (long) current.data;
-            current = current.next;
-        }
-        return array;
-    }
 }
