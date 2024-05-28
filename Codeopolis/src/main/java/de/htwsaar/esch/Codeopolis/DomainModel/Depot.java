@@ -6,6 +6,7 @@ import java.util.NoSuchElementException;
 
 public class Depot {
     private LinkedList<Silo> silos;
+    private LinkedList<Silo>.LinkedListIterator siloIterator;
 
     /**
      * Constructs a Depot object with the specified number of silos and capacity per silo.
@@ -15,6 +16,7 @@ public class Depot {
      */
     public Depot(int numberOfSilos, int capacityPerSilo) {
         this.silos = new LinkedList<>();
+        this.siloIterator = silos.iterator();
         for (int i = 0; i < numberOfSilos; i++) {
             this.silos.addLast(new Silo(capacityPerSilo));
         }
@@ -28,7 +30,7 @@ public class Depot {
      */
     public Depot(LinkedList<Silo> silosList) {
         this.silos = new LinkedList<>();
-         for (int i = 0; i < silosList.size(); i++) {
+        for (int i = 0; i < silosList.size(); i++) {
             // Assuming Silo has a copy constructor to create a deep copy
             this.silos.addLast(new Silo(silosList.get(i)));
         }

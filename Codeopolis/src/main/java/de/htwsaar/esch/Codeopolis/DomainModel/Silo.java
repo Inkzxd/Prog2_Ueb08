@@ -1,5 +1,6 @@
 package de.htwsaar.esch.Codeopolis.DomainModel;
 
+import de.htwsaar.esch.Codeopolis.DomainModel.LinkedList.LinkedListIterator;
 import de.htwsaar.esch.Codeopolis.DomainModel.Harvest.*;
 import java.io.Serializable;
 
@@ -10,6 +11,7 @@ public class Silo implements Serializable, Comparable<Silo> {
     private LinkedList<Harvest> stock;
     private final int capacity;
     private int fillLevel;
+    private LinkedList<Harvest>.LinkedListIterator harvestIterator;
 
     public class Status {
         private final int currentCapacity;
@@ -36,8 +38,9 @@ public class Silo implements Serializable, Comparable<Silo> {
      */
     public Silo(int capacity) {
         this.capacity = capacity;
-        this.stock = new LinkedList<>();
         this.fillLevel = 0;
+        this.stock = new LinkedList<>();
+        this.harvestIterator = stock.iterator();
     }
     
     /**
@@ -179,8 +182,8 @@ public class Silo implements Serializable, Comparable<Silo> {
      */
     public int decay(int currentYear) {
         int totalDecayedAmount = 0;
-        for (int i = 0; i < stock.size(); i++) {
-            Harvest currentHarvest = stock.get(i);
+        while (harvestIterator.hasNext()) {
+            Harvest currentHarvest = harvestIterator.next();
             totalDecayedAmount += currentHarvest.decay(currentYear);
         }
         fillLevel -= totalDecayedAmount;
