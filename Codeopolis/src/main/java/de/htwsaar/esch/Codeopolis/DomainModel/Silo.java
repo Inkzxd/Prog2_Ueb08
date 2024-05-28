@@ -1,6 +1,5 @@
 package de.htwsaar.esch.Codeopolis.DomainModel;
 
-import de.htwsaar.esch.Codeopolis.DomainModel.LinkedList.LinkedListIterator;
 import de.htwsaar.esch.Codeopolis.DomainModel.Harvest.*;
 import java.io.Serializable;
 
@@ -11,7 +10,17 @@ public class Silo implements Serializable, Comparable<Silo> {
     private LinkedList<Harvest> stock;
     private final int capacity;
     private int fillLevel;
-    private LinkedList<Harvest>.LinkedListIterator harvestIterator;
+    private int stockIndex = -1;
+
+    public int compareTo (Silo silo) {
+        if (this.fillLevel < silo.fillLevel) {
+            return -1;
+        } else if (this.fillLevel > silo.fillLevel) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
 
     public class Status {
         private final int currentCapacity;
@@ -40,7 +49,6 @@ public class Silo implements Serializable, Comparable<Silo> {
         this.capacity = capacity;
         this.fillLevel = 0;
         this.stock = new LinkedList<>();
-        this.harvestIterator = stock.iterator();
     }
     
     /**
@@ -54,10 +62,11 @@ public class Silo implements Serializable, Comparable<Silo> {
     public Silo(Silo other) {
         this.capacity = other.capacity;
         this.fillLevel = other.fillLevel;
+        this.stockIndex = other.stockIndex;
         this.stock = new LinkedList<>();
-
-        for (int i = 0; i < other.stock.size(); i++) {
-            this.stock.addLast(other.stock.get(i).copy());
+        LinkedList<Harvest>.LinkedIterator<Harvest> iterator = other.stock.iterator();
+        while(iterator.hasNext()){
+            this.stock.addLast(iterator.next());
         }
     }
 
@@ -80,11 +89,13 @@ public class Silo implements Serializable, Comparable<Silo> {
         
         int remainingCapacity = this.capacity - this.fillLevel;
         if(harvest.getAmount() <= remainingCapacity) {
+            this.stockIndex++;
             this.stock.addLast(harvest);
             this.fillLevel += harvest.getAmount();
             return null;
         } else {
             Harvest remainingHarvest = harvest.split(remainingCapacity);
+            this.stockIndex++;
             this.stock.addLast(remainingHarvest); // Store the remaining harvest in the current depot
             this.fillLevel += remainingHarvest.getAmount();
             return harvest; // Return the surplus amount
@@ -102,10 +113,12 @@ public class Silo implements Serializable, Comparable<Silo> {
             return new LinkedList<>();
         } else {
             LinkedList<Harvest> removedHarvests = new LinkedList<>();
-            for (int i = 0; i < stock.size(); i++) {
-                removedHarvests.addLast(stock.get(i));
+            LinkedList<Harvest>.LinkedIterator<Harvest> iterator = stock.iterator();
+            while (iterator.hasNext()) {
+                removedHarvests.addLast(iterator.next());
             }
-            stock.clear();
+            this.stock.clear();
+            stockIndex = -1;
             fillLevel = 0;
             return removedHarvests;
         }
@@ -119,15 +132,19 @@ public class Silo implements Serializable, Comparable<Silo> {
      */
     public int takeOut(int amount) {
         int takenAmount = 0;
+        int index = 0;
+        LinkedList<Harvest>.LinkedIterator<Harvest> iterator = stock.iterator();
 
-        while (amount > 0 && !stock.isEmpty()) {
-            Harvest currentHarvest = stock.get(0);
-            int taken = currentHarvest.remove(amount);
+        while (iterator.hasNext() && amount > 0) {
+            Harvest harvest = iterator.next();
+            int taken = harvest.remove(amount);
             amount -= taken;
             takenAmount += taken;
 
-            if (currentHarvest.getAmount() == 0) {
-                stock.removeFirst();
+            if (harvest.getAmount() <= 0) {
+                iterator.remove();
+            } else {
+                index++;
             }
         }
         this.fillLevel -= takenAmount;
@@ -171,7 +188,7 @@ public class Silo implements Serializable, Comparable<Silo> {
      * @return The number of harvests stored in the silo.
      */
     public int getHarvestCount() {
-        return stock.size();
+        return this.stock.size();
     }
 
     /**
@@ -182,8 +199,9 @@ public class Silo implements Serializable, Comparable<Silo> {
      */
     public int decay(int currentYear) {
         int totalDecayedAmount = 0;
-        while (harvestIterator.hasNext()) {
-            Harvest currentHarvest = harvestIterator.next();
+        LinkedList<Harvest>.LinkedIterator<Harvest> iterator = stock.iterator();
+        while (iterator.hasNext()) {
+            Harvest currentHarvest = iterator.next();
             totalDecayedAmount += currentHarvest.decay(currentYear);
         }
         fillLevel -= totalDecayedAmount;
@@ -192,16 +210,5 @@ public class Silo implements Serializable, Comparable<Silo> {
 
     public Status getStatus() {
         return new Status();
-    }
-
-    @Override
-    public int compareTo(Silo other) {
-        if (this.fillLevel < other.fillLevel) {
-            return -1;
-        } else if (this.fillLevel > other.fillLevel) {
-            return 1;
-        } else {
-            return 0;
-        }
     }
 }
