@@ -235,8 +235,12 @@ public class LinkedList<T> {
     }
 
     public static void main (String[] args) {
-        LinkedList<Integer> list = new LinkedList<>();
-        list.addLast(5);
+        LinkedList<Comparable<?>> list = new LinkedList<>();
+        list.addLast("Hello");
+        list.addLast(5.6);
+        list.addLast(true);
+        list.addLast('c');
+        list.addLast("ASDF");
         list.addLast(3);
         list.addLast(8);
         list.addLast(1);
@@ -247,6 +251,16 @@ public class LinkedList<T> {
         System.out.println("Original list: " + list);
         list.sort();
         System.out.println("Sorted list: " + list);
+    }
+
+    public long[] toArray() {
+        long[] array = new long[size];
+        Node<T> current = head;
+        for (int i = 0; i < size; i++) {
+            array[i] = (long) current.data;
+            current = current.next;
+        }
+        return array;
     }
 
 }
