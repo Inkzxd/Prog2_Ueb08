@@ -7,7 +7,7 @@ import java.util.NoSuchElementException;
  *
  * @param <T> the type of elements in this list
  */
-public class LinkedList<T> {
+public class LinkedList<T extends Comparable<T>> {
     private Node<T> head; // The head (first node) of the list
     private int size; // The number of elements in the list
 
@@ -234,25 +234,6 @@ public class LinkedList<T> {
         return sb.toString();
     }
 
-    public static void main (String[] args) {
-        LinkedList<Comparable<?>> list = new LinkedList<>();
-        list.addLast("Hello");
-        list.addLast(5.6);
-        list.addLast(true);
-        list.addLast('c');
-        list.addLast("ASDF");
-        list.addLast(3);
-        list.addLast(8);
-        list.addLast(1);
-        list.addLast(2);
-        list.addLast(7);
-        list.addLast(4);
-        list.addLast(6);
-        System.out.println("Original list: " + list);
-        list.sort();
-        System.out.println("Sorted list: " + list);
-    }
-
     public long[] toArray() {
         long[] array = new long[size];
         Node<T> current = head;
@@ -262,5 +243,4 @@ public class LinkedList<T> {
         }
         return array;
     }
-
 }
