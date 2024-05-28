@@ -134,7 +134,7 @@ public class GrainTests {
     public void testMillet(float soilConditions, float averageTemperatureSummer, float averageTemperatureWinter, int acres, int expectedCrop, int expectedCropDrought, int expectedCropFritFly, int expectedCropDeliaFly, int expectedCropBarleyGoutFly, int expectedCropPowderyMildew, int expectedCropLeafDrought, int expectedCropFusarium) {
 		
 		Millet millet = new Millet();
-    Grain.Conditions conditions = new Grain.Conditions(soilConditions, averageTemperatureSummer, averageTemperatureWinter);
+        Grain.Conditions conditions = new Grain.Conditions(soilConditions, averageTemperatureSummer, averageTemperatureWinter);
         
         //test harvesting without planting and growing. 
         int crop = millet.harvest();
@@ -361,7 +361,7 @@ public class GrainTests {
     public void testRice(float soilConditions, float averageTemperatureSummer, float averageTemperatureWinter, int acres, int expectedCrop, int expectedCropDrought, int expectedCropFritFly, int expectedCropDeliaFly, int expectedCropBarleyGoutFly, int expectedCropPowderyMildew, int expectedCropLeafDrought, int expectedCropFusarium) {
 		
 		Rice rice = new Rice();
-    Grain.Conditions conditions = new Grain.Conditions(soilConditions, averageTemperatureSummer, averageTemperatureWinter);
+        Grain.Conditions conditions = new Grain.Conditions(soilConditions, averageTemperatureSummer, averageTemperatureWinter);
         
         //test harvesting without planting and growing. 
         int crop = rice.harvest();
@@ -474,7 +474,7 @@ public class GrainTests {
     public void testRye(float soilConditions, float averageTemperatureSummer, float averageTemperatureWinter, int acres, int expectedCrop, int expectedCropDrought, int expectedCropFritFly, int expectedCropDeliaFly, int expectedCropBarleyGoutFly, int expectedCropPowderyMildew, int expectedCropLeafDrought, int expectedCropFusarium) {
 		
 		Rye rye = new Rye();
-    Grain.Conditions conditions = new Grain.Conditions(soilConditions, averageTemperatureSummer, averageTemperatureWinter);
+        Grain.Conditions conditions = new Grain.Conditions(soilConditions, averageTemperatureSummer, averageTemperatureWinter);
         
         //test harvesting without growing. 
         int crop = rye.harvest();

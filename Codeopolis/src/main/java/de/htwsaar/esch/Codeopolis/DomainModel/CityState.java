@@ -7,14 +7,14 @@ import java.util.Arrays;
  * Represents the state of a city.
  */
 public class CityState implements Serializable{
-	private int residents;
-	private int[] bushels;
-	private int acres;
-	private int year;
-	private String name;
-	private String id;
-	private Silo[] silos;
-	private int freeStorage;
+	private final int residents;
+	private final int[] bushels;
+	private final int acres;
+	private final int year;
+	private final String name;
+	private final String id;
+	private final Silo[] silos;
+	private final int freeStorage;
 	
 	/**
      * Constructs a new CityState object with the specified residents, bushels, and acres.
@@ -174,4 +174,7 @@ public class CityState implements Serializable{
                 Arrays.equals(bushels, other.bushels) &&
                 Arrays.equals(silos, other.silos);
     }
+
+
+
 }

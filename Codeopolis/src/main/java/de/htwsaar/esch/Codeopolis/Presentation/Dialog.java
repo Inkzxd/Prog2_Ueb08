@@ -9,10 +9,10 @@ import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+import de.htwsaar.esch.Codeopolis.DomainModel.City;
 import de.htwsaar.esch.Codeopolis.DomainModel.CityState;
 import de.htwsaar.esch.Codeopolis.DomainModel.Game;
 import de.htwsaar.esch.Codeopolis.DomainModel.GameConfig;
-import de.htwsaar.esch.Codeopolis.DomainModel.TurnResult;
 
 /**
  * The Dialog class represents a command line interface for the Codeopolis game.
@@ -75,7 +75,6 @@ public class Dialog extends UserInterface{
     /**
 	 * Executes the function selected by the user in the main menu.
 	 *
-	 * @return The selected function as an integer.
 	 */
     private void executeFunction(int funktion) {
     	switch (funktion) {
@@ -221,26 +220,21 @@ public class Dialog extends UserInterface{
      * @return The positive integer entered by the user.
      */
 	private int readPositivIntegerInput() {
-		int result = -1;
-		String line;
-		while(result < 0) {
-			try {
-				line = input.next();
-				result = Integer.parseInt(line);
-				if(result < 0)
-					System.out.println("You entered a negative integer. Please try again.");
+		try {
+			int result = Integer.parseInt(input.next());
+			if (result >= 0) {
+				return result;
+			} else {
+				System.out.println("You entered a negative integer. Please try again.");
 			}
-			catch(NumberFormatException e) {
-				System.out.println("Error – Please enter an integer value");
-			}
-			catch(NoSuchElementException e) {
-				System.out.println(e);
-			}
-			catch(IllegalStateException e) {
-				System.out.println(e);
-			}
+		} catch (NumberFormatException e) {
+			System.out.println("Error – Please enter an integer value.");
+		} catch (NoSuchElementException e) {
+			System.out.println(e.getMessage());
+		} catch (IllegalStateException e) {
+			System.out.println(e.getMessage());
 		}
-		return result;
+		return readPositivIntegerInput();
 	}
 	
 	@Override
@@ -301,7 +295,7 @@ public class Dialog extends UserInterface{
 	}
 	
 	@Override
-	public void turnEnd(TurnResult result) {
+	public void turnEnd(City.TurnResult result) {
 		System.out.println("\n=== TURN ENDED ===");
 		System.out.println("Year "+result.getYear()+" of your great city "+result.getName()+" is over.");
 		System.out.println(result.getStarved()+" people starved.");

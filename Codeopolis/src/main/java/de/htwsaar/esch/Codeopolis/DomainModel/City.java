@@ -1,11 +1,11 @@
 package de.htwsaar.esch.Codeopolis.DomainModel;
 
+import java.util.Arrays;
 import java.util.Random;
 
 import de.htwsaar.esch.Codeopolis.DomainModel.Game.GrainType;
 import de.htwsaar.esch.Codeopolis.DomainModel.Harvest.*;
 import de.htwsaar.esch.Codeopolis.DomainModel.Plants.*;
-import de.htwsaar.esch.Codeopolis.DomainModel.Plants.Grain.Conditions;
 import de.htwsaar.esch.Codeopolis.Exceptions.*;
 
 /**
@@ -19,7 +19,7 @@ public class City extends GameEntity {
 	private Random fortune;
 	private Grain[] planted;
     private GameConfig config;
-    private String name;
+    private final String name;
     private Depot depot;
     
     /**
@@ -53,7 +53,7 @@ public class City extends GameEntity {
         this.residents = cityState.getResidents();
         this.year = cityState.getYear();
 
-        // TODO this.depot = new Depot(cityState.getSilos());  
+        this.depot = new Depot(cityState.getSilos());  
     }
 
     
@@ -76,8 +76,8 @@ public class City extends GameEntity {
      * Expands the capacity of the depot in the game by the specified additional capacity.
      * This method delegates the expansion operation to the underlying Depot object.
      *
-     * @param additionalCapacity The additional capacity to be added to the depot.
-     * @see Depot#expand(int)
+     * @param numberOfSilos The number of new silos
+	 * @param capacityPerSilo The capacity of the new silos
      */
     public void expandDepot(int numberOfSilos, int capacityPerSilo) {
     	this.depot.expand(numberOfSilos, capacityPerSilo);
@@ -88,7 +88,6 @@ public class City extends GameEntity {
      * 
      * @param price The price per acre.
      * @param acres The number of acres to buy.
-     * @return True if the purchase was successful, false otherwise.
      */
 	public void buy(int price, int acres) throws InsufficientResourcesException{
 		if(this.acres == 0)
@@ -107,7 +106,6 @@ public class City extends GameEntity {
      * 
      * @param price The price per acre.
      * @param acres The number of acres to sell.
-     * @return True if the sale was successful, false otherwise.
      */
 	public void sell(int price, int acres) throws LandOperationException, DepotCapacityExceededException{
 		if(acres == 0)
@@ -128,7 +126,6 @@ public class City extends GameEntity {
      * Attempts to feed the residents with the specified number of bushels.
      * 
      * @param feed The number of bushels to feed the residents.
-     * @return True if the feeding was successful, false otherwise.
      */
 	public void feed(int feed) throws InsufficientResourcesException{
 		if(feed>this.depot.getTotalFillLevel())
@@ -141,11 +138,9 @@ public class City extends GameEntity {
      * Attempts to plant the specified number of acres.
      * 
      * @param acres The number of acres to plant.
-     * @return True if the planting was successful, false otherwise.
      */
 	public void plant(int[] acres) throws InsufficientResourcesException, LandOperationException{
 		int acresSum = 0;
-		Random rand = new Random();
 		for (GrainType grainType : GrainType.values()) {
 	        int i = grainType.ordinal();
 			acresSum += acres[i];
@@ -168,37 +163,42 @@ public class City extends GameEntity {
 
 		Grain seed = null;
 		for (GrainType grainType : GrainType.values()) {
+			seed = null;
 			int grainTypeIndex = grainType.ordinal(); // Get the ordinal index of the enum
-			if (grainType == GrainType.WHEAT && rand.nextDouble() <= 0.1) {
-				seed = new Wheat() {
-					@Override
-					public void grow(Conditions conditions) {
-						super.grow(conditions);
-						this.yieldRatio *= 2;
-					}
-				};
-			} else {
-				switch (grainType) {
-					case BARLEY:
-						seed = new Barley();
-						break;
-					case CORN:
-						seed = new Corn();
-						break;
-					case MILLET:
-						seed = new Millet();
-						break;
-					case RICE:
-						seed = new Rice();
-						break;
-					case RYE:
-						seed = new Rye();
-						break;
-					case WHEAT:
-						seed = new Wheat();
-						break;
-					// No default case needed as we are covering all enum constants
-			}
+
+			switch (grainType) {
+	        case BARLEY:
+	            seed = new Barley();
+	            break;
+	        case CORN:
+	            seed = new Corn();
+	            break;
+	        case MILLET:
+	            seed = new Millet();
+	            break;
+	        case RICE:
+	            seed = new Rice();
+	            break;
+	        case RYE:
+	            seed = new Rye();
+	            break;
+	        case WHEAT:
+				if (fortune.nextDouble() < 0.1)
+					seed = new Wheat(){
+						@Override
+						protected float getBasicYieldRatio() {
+							return super.getBasicYieldRatio()*2;
+						}
+
+						@Override
+						public void pestInfestation(Pests pest, Conditions conditions) {
+							super.pestInfestation(pest, conditions);
+						}
+					};
+				else
+		            seed = new Wheat();
+	            break;
+	        // No default case needed as we are covering all enum constants
 			}
 			if(acres[grainTypeIndex] > 0 && seed != null) {
 				seed.plant(acres[grainTypeIndex]);
@@ -207,7 +207,6 @@ public class City extends GameEntity {
 			}
 		}
 	}
-	
 
 	
 	/**
@@ -259,7 +258,7 @@ public class City extends GameEntity {
 
 		//Calculation of the harvest:
 		int[] harvested = new int[Game.GrainType.values().length];
-		Conditions thisYearsConditions = Conditions.generateRandomConditions();
+		Grain.Conditions thisYearsConditions = Grain.Conditions.generateRandomConditions();
 	
 		for(int i = 0; i< Game.GrainType.values().length; i++) {
 			if(this.planted[i] != null) {
@@ -304,7 +303,7 @@ public class City extends GameEntity {
 		this.year++;
 		
 		
-		return new TurnResult(this.name, 
+		return new City.TurnResult(this.name,
 				this.year, 
 				newResidents, 
 				harvested, 
@@ -338,7 +337,7 @@ public class City extends GameEntity {
      * @return The CityState object representing the current state.
      */
 	public CityState getState() {
-		return null; // TODO new CityState(this.name, this.getId(), this.residents, this.depot.getBushelsCategorizedByGrainType(), this.acres, this.year, this.depot.totalCapacity() - this.depot.getTotalFillLevel(), this.depot.getSilos());
+		return new CityState(this.name, this.getId(), this.residents, this.depot.getBushelsCategorizedByGrainType(), this.acres, this.year, this.depot.totalCapacity() - this.depot.getTotalFillLevel(), this.depot.getSilos());
 	}
 
 	/**
@@ -353,6 +352,260 @@ public class City extends GameEntity {
 	    this.depot.store(Harvest.createHarvest(Game.GrainType.RYE, 100000, this.year)); 
 	    this.depot.store(Harvest.createHarvest(Game.GrainType.WHEAT, 100000, this.year));
 	    this.acres = 1000000;
+	}
+
+
+	public class TurnResult {
+		private final String name; //The name of the city
+		private final int year; //The year of the city
+		private final int newResidents; // Number of new residents in the city after the turn
+		private final int[] bushelsHarvested; // Amount of bushels harvested during the turn
+		private final int residents; // Current number of residents in the city
+		private final int[] bushels; // Current number of bushels in the city
+		private final int starved; // Number of residents who starved during the turn
+		private final int acres; // Current number of acres owned by the city
+		private final int ateByRates; // Number of bushels eaten by rats during the turn
+		private final int starvedPercentage; // Percentage of residents starved during the turn
+		private final int depotCapacity; // The amount of storage spaces in the depot
+		private final int freeStorageSpaces; // The amount of free storage spaces in the depot
+		private final int bushelsDecayed; // The amount of bushels decayed in the depot during the last year.
+		private final String depotState; //The state of the depot represented as string.
+
+
+
+		/**
+		 * Constructs a `TurnResult` object with the specified values for each attribute.
+		 *
+		 * @param name             The name of the city
+		 * @param year             The year of the city
+		 * @param newResidents     Number of new residents in the city after the turn
+		 * @param bushelsHarvested Amount of bushels harvested during the turn
+		 * @param residents        Current number of residents in the city
+		 * @param bushels          Current number of bushels in the city
+		 * @param starved          Number of residents who starved during the turn
+		 * @param acres            Current number of acres owned by the city
+		 * @param ateByRates       Number of bushels eaten by rats during the turn
+		 * @param bushelsDecayed       Amount of bushels that decayed during the turn.
+		 * @param depotCapacity        The capacity of the city's depot for storing harvests.
+		 * @param freeStorageSpaces    The number of free storage spaces in the city's depot.
+		 * @param depotState	The state of the depot represented as string.
+		 */
+
+		private TurnResult(String name, int year, int newResidents, int[] bushelsHarvested, int residents, int[] bushels, int starved, int acres, int ateByRates, int starvedPercentage, int bushelsDecayed, int depotCapacity, int freeStorageSpaces, String depotState) {
+			this.name = name;
+			this.year = year;
+			this.newResidents = newResidents;
+			this.bushelsHarvested =bushelsHarvested;
+			this.residents = residents;
+			this.bushels = bushels;
+			this.starved = starved;
+			this.acres = acres;
+			this.ateByRates = ateByRates;
+			this.starvedPercentage = starvedPercentage;
+			this.bushelsDecayed = bushelsDecayed;
+			this.depotCapacity = depotCapacity;
+			this.freeStorageSpaces = freeStorageSpaces;
+			this.depotState = depotState;
+		}
+
+		/**
+		 * Returns the number of new residents in the city after the turn.
+		 *
+		 * @return The number of new residents
+		 */
+		public int getNewResidents() {
+			return newResidents;
+		}
+
+		/**
+		 * Returns the amount of bushels harvested during the turn.
+		 *
+		 * @return The amount of bushels harvested
+		 */
+
+		public int[] getBushelsHarvested() {
+			return bushelsHarvested;
+		}
+
+		/**
+		 * Returns the current number of residents in the city.
+		 *
+		 * @return The number of residents
+		 */
+		public int getResidents() {
+			return residents;
+		}
+
+		/**
+		 * Returns the current number of bushels in the city.
+		 *
+		 * @return The number of bushels
+		 */
+		public int[] getBushels() {
+			return bushels;
+		}
+
+		/**
+		 * Returns the number of residents who starved during the turn.
+		 *
+		 * @return The number of starved residents
+		 */
+		public int getStarved() {
+			return starved;
+		}
+
+		/**
+		 * Returns the current number of acres in the city.
+		 *
+		 * @return The number of acres
+		 */
+		public int getAcres() {
+			return acres;
+		}
+
+		/**
+		 * Returns the number of bushels eaten by rats during the turn.
+		 *
+		 * @return The number of bushels eaten by rats
+		 */
+		public int getAteByRates() {
+			return ateByRates;
+		}
+
+		/**
+		 * Returns a string representation of the `TurnResult` object.
+		 *
+		 * @return A string representation of the object, displaying its attributes and their values
+		 */
+		@Override
+		public String toString() {
+			return "TurnResult{" +
+					"name='" + name + '\'' +
+					", year=" + year +
+					", newResidents=" + newResidents +
+					", bushelsHarvested=" + bushelsHarvested +
+					", residents=" + residents +
+					", bushels=" + bushels +
+					", starved=" + starved +
+					", acres=" + acres +
+					", ateByRates=" + ateByRates +
+					'}';
+		}
+
+		/**
+		 * Returns the name of the city.
+		 *
+		 * @return The name of the city.
+		 */
+		public String getName() {
+			return name;
+		}
+
+		/**
+		 * Returns the year of the city.
+		 *
+		 * @return The year of the city.
+		 */
+		public int getYear() {
+			return year;
+		}
+
+		/**
+		 * Indicates whether some other object is equal to this one by means of value equality.
+		 *
+		 * @param obj The reference object with which to compare.
+		 * @return true if this object is the same as the obj argument; false otherwise.
+		 */
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj) {
+				return true;
+			}
+			if (obj == null || getClass() != obj.getClass()) {
+				return false;
+			}
+			de.htwsaar.esch.Codeopolis.DomainModel.City.TurnResult other = (de.htwsaar.esch.Codeopolis.DomainModel.City.TurnResult) obj;
+			return year == other.year &&
+					newResidents == other.newResidents &&
+					Arrays.equals(bushelsHarvested, other.bushelsHarvested) &&
+					residents == other.residents &&
+					Arrays.equals(bushels, other.bushels) &&
+					starved == other.starved &&
+					acres == other.acres &&
+					ateByRates == other.ateByRates &&
+					name.equals(other.name) &&
+					starvedPercentage == other.starvedPercentage &&
+					depotCapacity == other.depotCapacity &&
+					freeStorageSpaces == other.freeStorageSpaces &&
+					bushelsDecayed == other.bushelsDecayed;
+		}
+
+		/**
+		 * Returns the percentage of residents starved during this turn.
+		 *
+		 * @return Percentage of residents starved during this turn.
+		 */
+		public int getStarvedPercentage() {
+			return starvedPercentage;
+		}
+
+		/**
+		 * The amount of storage spaces in the depot
+		 * @return Amount of storage spaces in the depot
+		 */
+		public int getDepotCapacity() {
+			return depotCapacity;
+		}
+
+		/**
+		 * The amount of free storage spaces in the depot
+		 * @return The amount of free storage spaces in the depot
+		 */
+		public int getFreeStorageSpaces() {
+			return freeStorageSpaces;
+		}
+
+		/**
+		 * Gets the amount of bushels that decayed during the turn.
+		 *
+		 * @return The amount of bushels that decayed during the turn.
+		 */
+		public int getBushelsDecayed() {
+			return this.bushelsDecayed;
+		}
+
+		/**
+		 * Returns the total number of bushels harvested during the turn.
+		 *
+		 * @return The total number of bushels harvested.
+		 */
+		public int getNumberOfBushelsHarvested() {
+			int result = 0;
+			for(int i = 0; i< this.getBushelsHarvested().length; i++)
+				result += this.getBushelsHarvested()[i];
+			return result;
+		}
+
+		/**
+		 * Returns the total number of bushels in the city after the turn.
+		 *
+		 * @return The total number of bushels.
+		 */
+		public int getTotalNumberOfBushels() {
+			int result = 0;
+			for(int i = 0; i< this.getBushels().length; i++)
+				result += this.getBushels()[i];
+			return result;
+		}
+
+		/**
+		 * Retrieves the state of the depot represented as string.
+		 *
+		 * @return The state of the depot.
+		 */
+		public String getDepotState() {
+			return depotState;
+		}
 	}
 
 }

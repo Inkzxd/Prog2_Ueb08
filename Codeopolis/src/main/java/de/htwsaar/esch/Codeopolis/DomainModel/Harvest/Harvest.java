@@ -11,7 +11,7 @@ import de.htwsaar.esch.Codeopolis.DomainModel.Game.GrainType;
  */
 public abstract class Harvest implements Serializable {
     private int bushels;
-    private int year;
+    private final int year;
 
 
     protected Harvest(int bushels, int year) {

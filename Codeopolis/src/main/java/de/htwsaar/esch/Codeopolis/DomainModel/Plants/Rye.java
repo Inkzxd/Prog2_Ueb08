@@ -1,6 +1,5 @@
 package de.htwsaar.esch.Codeopolis.DomainModel.Plants;
 
-
 /**
  * The `Rye` class represents a specific type of winter grain, rye.
  * It inherits properties and methods from the `WinterGrain` class and defines

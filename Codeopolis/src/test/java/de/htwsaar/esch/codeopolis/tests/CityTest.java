@@ -215,9 +215,7 @@ class CityTest {
 	
 	/**
      * Parameterized test for planting acres without enough available residents in the city.
-     * 
-     * @param testData The test data array containing input and expected output values.
-     */
+	 */
 	@Test
 	void testPlantEnoughtResidents() {
 		testCity.IDKFA();
