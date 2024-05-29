@@ -211,4 +211,8 @@ public class Silo implements Serializable, Comparable<Silo> {
     public Status getStatus() {
         return new Status();
     }
+
+    public LinkedList<Harvest> sort () {
+        return stock.sort();
+    }
 }

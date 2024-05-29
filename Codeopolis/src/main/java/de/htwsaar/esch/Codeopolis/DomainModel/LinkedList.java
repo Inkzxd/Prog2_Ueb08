@@ -232,43 +232,86 @@ public class LinkedList<T extends Comparable<T>> {
         return new LinkedIterator<T>(this.head);
     }
 
-    public void sort() {
-        if (size > 1) {
+    public LinkedList<T> sort() {
+        LinkedList<T> sortedList = new LinkedList<>();
+    
+        // Copy the elements from the original list to the sortedList
+        Node<T> current = head;
+        while (current != null) {
+            sortedList.addLast(current.data);
+            current = current.next;
+        }
+    
+        if (sortedList.size() > 1) {
             boolean wasChanged;
-
+    
             do {
-                Node<T> current = head;
-                Node<T> previous = null;
-                Node<T> next = current.next;
+                Node<T> currentNode = sortedList.head;
+                Node<T> previousNode = null;
+                Node<T> nextNode = currentNode.next;
                 wasChanged = false;
-
-                while (next != null) {
-                    if (current.data.compareTo(next.data) > 0) {
+    
+                while (nextNode != null) {
+                    if (currentNode.data.compareTo(nextNode.data) > 0) {
                         wasChanged = true;
-
-                        if (previous != null) {
-                            Node<T> sig = next.next;
-
-                            previous.next = next;
-                            next.next = current;
-                            current.next = sig;
+    
+                        // Swap nodes
+                        if (previousNode != null) {
+                            Node<T> sig = nextNode.next;
+    
+                            previousNode.next = nextNode;
+                            nextNode.next = currentNode;
+                            currentNode.next = sig;
                         } else {
-                            Node<T> sig = next.next;
-
-                            head = next;
-                            next.next = current;
-                            current.next = sig;
+                            Node<T> sig = nextNode.next;
+    
+                            sortedList.head = nextNode;
+                            nextNode.next = currentNode;
+                            currentNode.next = sig;
                         }
-
-                        previous = next;
-                        next = current.next;
+    
+                        previousNode = nextNode;
+                        nextNode = currentNode.next;
                     } else {
-                        previous = current;
-                        current = next;
-                        next = next.next;
+                        previousNode = currentNode;
+                        currentNode = nextNode;
+                        nextNode = nextNode.next;
                     }
                 }
             } while (wasChanged);
         }
+    
+        return sortedList;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        Node<T> current = head;
+        while (current != null) {
+            sb.append(current.data);
+            if (current.next != null) {
+                sb.append(", ");
+            }
+            current = current.next;
+        }
+        sb.append("]");
+        return sb.toString();
+    }
+
+    public static void main(String[] args) {
+        LinkedList<Integer> list = new LinkedList<>();
+        list.addLast(5);
+        list.addLast(3);
+        list.addLast(7);
+        list.addLast(1);
+        list.addLast(4);
+        list.addLast(2);
+        list.addLast(6);
+
+        LinkedList<Integer> sortedList = list.sort();
+        System.out.println("Original list: " + list);
+        System.out.println("Sorted list: " + sortedList);
     }
 }

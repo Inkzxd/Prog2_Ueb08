@@ -180,5 +180,4 @@ public abstract class Harvest implements Serializable, Comparable<Harvest> {
             return 0;
         }
     }
-    
 }
