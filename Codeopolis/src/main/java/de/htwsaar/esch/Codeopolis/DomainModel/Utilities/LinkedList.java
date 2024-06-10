@@ -3,6 +3,7 @@ package de.htwsaar.esch.Codeopolis.DomainModel.Utilities;
 import java.util.Comparator;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -372,5 +373,15 @@ public class LinkedList<T extends Comparable<T>> {
                 next = next.next;
             }
         }
+    }
+
+    public double sum (Function <T, Double> mapper) {
+        double sum = 0;
+        Node<T> current = head;
+        while (current != null) {
+            sum += mapper.apply(current.data);
+            current = current.next;
+        }
+        return sum;
     }
 }
