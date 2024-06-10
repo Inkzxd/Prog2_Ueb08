@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test;
 import de.htwsaar.esch.Codeopolis.DomainModel.Game;
 import de.htwsaar.esch.Codeopolis.DomainModel.Silo;
 import de.htwsaar.esch.Codeopolis.DomainModel.Game.GrainType;
-import de.htwsaar.esch.Codeopolis.DomainModel.LinkedList;
 import de.htwsaar.esch.Codeopolis.DomainModel.Harvest.*;
+import de.htwsaar.esch.Codeopolis.DomainModel.Utilities.LinkedList;
 
 public class SiloTests {
 

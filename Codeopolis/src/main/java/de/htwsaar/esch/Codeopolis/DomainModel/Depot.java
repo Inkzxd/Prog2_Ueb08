@@ -1,6 +1,8 @@
 package de.htwsaar.esch.Codeopolis.DomainModel;
 
 import de.htwsaar.esch.Codeopolis.DomainModel.Harvest.*;
+import de.htwsaar.esch.Codeopolis.DomainModel.Utilities.LinkedList;
+
 import java.text.DecimalFormat;
 import java.util.NoSuchElementException;
 

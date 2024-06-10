@@ -1,6 +1,9 @@
-package de.htwsaar.esch.Codeopolis.DomainModel;
+package de.htwsaar.esch.Codeopolis.DomainModel.Utilities;
 
+import java.util.Comparator;
 import java.util.NoSuchElementException;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 /**
  * A generic singly linked list implementation.
@@ -300,18 +303,74 @@ public class LinkedList<T extends Comparable<T>> {
         return sb.toString();
     }
 
-    public static void main(String[] args) {
-        LinkedList<Integer> list = new LinkedList<>();
-        list.addLast(5);
-        list.addLast(3);
-        list.addLast(7);
-        list.addLast(1);
-        list.addLast(4);
-        list.addLast(2);
-        list.addLast(6);
+    public LinkedList<T> filter (Predicate<T> filterPredicate) {
+        LinkedList<T> filteredList = new LinkedList<>();
+        Node<T> current = head;
+        while (current != null) {
+            if (filterPredicate.test(current.data)) {
+                filteredList.addLast(current.data);
+            }
+            current = current.next;
+        }
+        return filteredList;
+    }
 
-        LinkedList<Integer> sortedList = list.sort();
-        System.out.println("Original list: " + list);
-        System.out.println("Sorted list: " + sortedList);
+    public void forEach (Consumer<T> consumer) {
+        Node<T> current = head;
+        while (current != null) {
+            consumer.accept(current.data);
+            current = current.next;
+        }
+    }
+
+    public void removeIf (Predicate<T> removePredicate) {
+        Node<T> current = head;
+        Node<T> previous = null;
+        while (current != null) {
+            if (removePredicate.test(current.data)) {
+                if (previous == null) {
+                    head = current.next;
+                } else {
+                    previous.next = current.next;
+                }
+                size--;
+            } else {
+                previous = current;
+            }
+            current = current.next;
+        }
+    }
+
+    public void addIf (Predicate<T> addPredicate, T data) {
+        if (addPredicate.test(data)) {
+            addLast(data);
+        }
+    }
+
+    public void sort (Comparator<T> comparator) {
+        Node<T> current = head;
+        Node<T> previous = null;
+        Node<T> next = current.next;
+        while (next != null) {
+            if (comparator.compare(current.data, next.data) > 0) {
+                if (previous == null) {
+                    head = next;
+                    current.next = next.next;
+                    next.next = current;
+                    previous = next;
+                    next = current.next;
+                } else {
+                    previous.next = next;
+                    current.next = next.next;
+                    next.next = current;
+                    previous = next;
+                    next = current.next;
+                }
+            } else {
+                previous = current;
+                current = next;
+                next = next.next;
+            }
+        }
     }
 }

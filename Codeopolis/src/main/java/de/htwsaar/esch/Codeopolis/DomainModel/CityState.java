@@ -3,6 +3,8 @@ package de.htwsaar.esch.Codeopolis.DomainModel;
 import java.io.Serializable;
 import java.util.Arrays;
 
+import de.htwsaar.esch.Codeopolis.DomainModel.Utilities.LinkedList;
+
 /**
  * Represents the state of a city.
  */
