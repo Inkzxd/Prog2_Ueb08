@@ -1,10 +1,15 @@
 package de.htwsaar.esch.Codeopolis.DomainModel;
 
+import de.htwsaar.esch.Codeopolis.DomainModel.Game.GrainType;
 import de.htwsaar.esch.Codeopolis.DomainModel.Harvest.*;
+import de.htwsaar.esch.Codeopolis.DomainModel.Utilities.DepotVisualizer;
 import de.htwsaar.esch.Codeopolis.DomainModel.Utilities.LinkedList;
 
 import java.text.DecimalFormat;
+import java.time.Period;
+import java.util.Comparator;
 import java.util.NoSuchElementException;
+import java.util.function.Predicate;
 
 public class Depot {
     private LinkedList<Silo> silos;
@@ -103,26 +108,20 @@ public class Depot {
      * @return True if the harvest was successfully stored, false otherwise.
      */
     public boolean store(Harvest harvest) {
-        LinkedList<Silo>.LinkedIterator<Silo> iterator = this.silos.iterator();
+       final GrainType harvestGrainType = harvest.getGrainType();
+       LinkedList<Silo> silosGrainType = this.silos.filter((silo) -> silo.getGrainType() == harvestGrainType || silo.getFillLevel() == 0);
 
-        while (iterator.hasNext()) {
-            Silo currentSilo = iterator.next();
-            if (currentSilo.getGrainType() == harvest.getGrainType() || currentSilo.getFillLevel() == 0) {
-                harvest = currentSilo.store(harvest);
-                if (harvest == null) {
-                    return true;
-                }
+        for (int i = 0; i < silosGrainType.size(); i++) {
+            harvest = silos.get(i).store(harvest);
+            if (harvest == null) {
+                return true;
             }
         }
         defragment();
-        LinkedList<Silo>.LinkedIterator<Silo> iterator2 = this.silos.iterator();
-        while (iterator2.hasNext()) {
-            Silo currentSilo = iterator2.next();
-            if (currentSilo.getGrainType() == harvest.getGrainType() || currentSilo.getFillLevel() == 0) {
-                harvest = currentSilo.store(harvest);
-                if (harvest == null) {
-                    return true;
-                }
+        for (int i = 0; i < silosGrainType.size(); i++) {
+            harvest = silos.get(i).store(harvest);
+            if (harvest == null) {
+                return true;
             }
         }
         return false;
@@ -299,6 +298,11 @@ public class Depot {
 	}
 	
 	
+	
+
+
+    
+	
 
 
 	/**
@@ -308,61 +312,18 @@ public class Depot {
 	 */
 	@Override
 	public String toString() {
-
-
-        // creating the local class
-        class DepotVisualizer {
-
-            private StringBuilder builder = new StringBuilder();
-            private DecimalFormat df = new DecimalFormat("0.00");
-
-            private int index = 0;
-
-            // adding information to a silo
-            public void appendSiloInfo(Silo silo) {
-
-                builder.append("Silo ").append(index + 1).append(": ");
-
-                String grainName = (silo.getGrainType() != null) ? silo.getGrainType().toString() : "EMPTY";
-                builder.append(grainName).append("\n");
-
-                int fillLevel = silo.getFillLevel();
-                int capacity = silo.getCapacity();
-
-                double fillPercentage = (double) fillLevel / capacity * 100;
-                int fillBarLength = 20;
-
-                int filledBars = (int) (fillPercentage / 100 * fillBarLength);
-                int emptyBars = fillBarLength - filledBars;
-
-                builder.append("Amount of Grain: ").append(fillLevel).append(" units\n");
-                builder.append("|");
-
-                for (int j = 0; j < filledBars; j++) {
-                    builder.append("=");
-                }
-
-                for (int j = 0; j < emptyBars; j++) {
-                    builder.append("-");
-                }
-
-                builder.append("| ").append(df.format(fillPercentage)).append("% filled\n");
-                builder.append("Capacity: ").append(capacity).append(" units\n\n");
-
-                index++;
-            }
-
-            public String visualize() {
-                return builder.toString();
-            }
-        }
-
-        silos.sort();
         DepotVisualizer result = new DepotVisualizer();
         for (int i = 0; i < silos.size(); i++) {
-
             result.appendSiloInfo(silos.get(i));
         }
+        return result.visualize();
+    }
+
+    public String toString (Predicate<Silo> siloPredicate, Comparator<Silo> siloComparator) {
+        LinkedList<Silo> filteredSilos = new LinkedList<>();
+        DepotVisualizer result = new DepotVisualizer();
+        filteredSilos.sort(siloComparator);
+        filteredSilos.forEach(silo -> result.appendSiloInfo(silo));
         return result.visualize();
     }
 
