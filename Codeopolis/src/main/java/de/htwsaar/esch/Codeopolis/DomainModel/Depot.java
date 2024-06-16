@@ -30,10 +30,7 @@ public class Depot {
      */
     public Depot(LinkedList<Silo> silosList) {
         this.silos = new LinkedList<>();
-        LinkedList<Silo>.LinkedIterator<Silo> iterator = silosList.iterator();
-        while (iterator.hasNext()) {
-            this.silos.addLast(new Silo(iterator.next()));
-        }
+        silos.forEach(silo -> this.silos.addLast(new Silo(silo)));
     }
 
     /**
@@ -54,18 +51,15 @@ public class Depot {
     
     /**
      * Creates and returns a copy of the silos array.
-     * This method creates a new array and populates it with copies of the Silo objects,
-     * ensuring that modifications to the returned array do not affect the original silos.
+     * This method creates a new LinkedList and populates it with copies of the Silo objects,
+     * ensuring that modifications to the returned list do not affect the original silos.
      *
-     * @return A copy of the silos array.
+     * @return A copy of the silos LinkedList.
      */
     public LinkedList<Silo> getSilos() {
-        // Create a new array of Silo with the same length as the original
+        // Create a new LinkedList and populate it with copies of the Silo objects
         LinkedList<Silo> silosCopy = new LinkedList<>();
-        LinkedList<Silo>.LinkedIterator<Silo> iterator = this.silos.iterator();
-        while (iterator.hasNext()) {
-            silosCopy.addLast(new Silo(iterator.next()));
-        }
+        silos.forEach(silo -> silosCopy.addLast(new Silo(silo)));
         return silosCopy;
     }
 
