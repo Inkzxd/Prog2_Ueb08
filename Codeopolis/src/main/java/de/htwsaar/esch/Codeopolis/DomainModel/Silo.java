@@ -111,19 +111,16 @@ public class Silo implements Serializable, Comparable<Silo> {
      *         If the silo is empty, an empty array is returned.
      */
     public LinkedList<Harvest> emptySilo() {
-        if (stock.isEmpty()) {
-            return new LinkedList<>();
-        } else {
-            LinkedList<Harvest> removedHarvests = new LinkedList<>();
-            LinkedList<Harvest>.LinkedIterator<Harvest> iterator = stock.iterator();
-            while (iterator.hasNext()) {
-                removedHarvests.addLast(iterator.next());
-            }
-            this.stock.clear();
+        LinkedList<Harvest> removedHarvests = new LinkedList<>();
+        this.stock.removeIf(harvest -> {
+            removedHarvests.addLast(harvest);
+            return true;
+        });
+        if (!removedHarvests.isEmpty()) {
             stockIndex = -1;
             fillLevel = 0;
-            return removedHarvests;
         }
+        return removedHarvests;
     }
 
     /**
