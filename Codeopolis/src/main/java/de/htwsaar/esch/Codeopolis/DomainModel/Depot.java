@@ -2,6 +2,7 @@ package de.htwsaar.esch.Codeopolis.DomainModel;
 
 import de.htwsaar.esch.Codeopolis.DomainModel.Game.GrainType;
 import de.htwsaar.esch.Codeopolis.DomainModel.Harvest.*;
+import de.htwsaar.esch.Codeopolis.Util.DepotVisualizer;
 import de.htwsaar.esch.Codeopolis.Util.LinkedList;
 import java.util.Iterator;
 
@@ -297,50 +298,6 @@ public class Depot {
 	 */
 	@Override
 	public String toString() {
-
-        class DepotVisualizer {
-            StringBuilder builder = new StringBuilder();
-            DecimalFormat df = new DecimalFormat("0.00");
-
-            int i=0;
-
-            String visualize() {
-
-                return builder.toString();
-            }
-
-            void appendSiloInfo(Silo silo) {
-                builder.append("Silo ").append(i + 1).append(": ");
-
-                String grainName = (silo.getGrainType() != null) ? silo.getGrainType().toString() : "EMPTY";
-                builder.append(grainName).append("\n");
-
-                int fillLevel = silo.getFillLevel();
-                int capacity = silo.getCapacity();
-                double fillPercentage = (double) fillLevel / capacity * 100;
-                //double emptyPercentage = 100 - fillPercentage;  Unused Variable
-
-                // Absolute amount of grain
-                builder.append("Amount of Grain: ").append(fillLevel).append(" units\n");
-
-                // ASCII-ART representation of the fill level
-                int fillBarLength = 20;
-                int filledBars = (int) (fillPercentage / 100 * fillBarLength);
-                int emptyBars = fillBarLength - filledBars;
-
-                builder.append("|");
-                for (int j = 0; j < filledBars; j++) {
-                    builder.append("=");
-                }
-                for (int j = 0; j < emptyBars; j++) {
-                    builder.append("-");
-                }
-                builder.append("| ").append(df.format(fillPercentage)).append("% filled\n");
-                builder.append("Capacity: ").append(capacity).append(" units\n\n");
-                i++;
-            }
-        }
-
         this.silos.sort();
         DepotVisualizer result = new DepotVisualizer();
         Iterator<Silo> iterator = this.silos.iterator();
