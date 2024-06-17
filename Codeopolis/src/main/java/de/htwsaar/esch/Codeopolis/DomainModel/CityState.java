@@ -4,7 +4,6 @@ import de.htwsaar.esch.Codeopolis.Util.LinkedList;
 import de.htwsaar.esch.Codeopolis.Util.Iterator;
 
 import java.io.Serializable;
-import java.util.Arrays;
 
 /**
  * Represents the state of a city.

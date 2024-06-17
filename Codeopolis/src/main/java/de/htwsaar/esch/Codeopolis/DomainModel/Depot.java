@@ -224,7 +224,6 @@ public class Depot {
      */
     public void defragment() {
         LinkedList<Harvest> allHarvests = new LinkedList<>();
-        int index = 0;
         Iterator<Silo> iterator = this.silos.iterator();
         Silo silo;
         while (iterator.hasNext()) {
