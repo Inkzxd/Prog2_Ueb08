@@ -4,10 +4,13 @@ import de.htwsaar.esch.Codeopolis.DomainModel.Game.GrainType;
 import de.htwsaar.esch.Codeopolis.DomainModel.Harvest.*;
 import de.htwsaar.esch.Codeopolis.Util.DepotVisualizer;
 import de.htwsaar.esch.Codeopolis.Util.LinkedList;
+
+import java.util.Comparator;
 import java.util.Iterator;
 
 import java.text.DecimalFormat;
 import java.util.NoSuchElementException;
+import java.util.function.Predicate;
 
 public class Depot {
     private LinkedList<Silo> silos;
@@ -306,6 +309,16 @@ public class Depot {
         }
 	    return result.visualize();
 	}
+
+    public String toString(Predicate<Silo> predicate, Comparator<Silo> comparator) {
+        // TODO: implement
+        LinkedList<Silo> filteredSilos = new LinkedList<>();
+        DepotVisualizer result = new DepotVisualizer();
+        for (Silo silo : filteredSilos) {
+            result.appendSiloInfo(silo);
+        }
+        return result.visualize();
+    }
 
     /**
      * Provides an iterator over silos of a specific grain type.
