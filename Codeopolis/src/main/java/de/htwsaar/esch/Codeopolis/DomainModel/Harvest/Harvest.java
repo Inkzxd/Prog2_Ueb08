@@ -167,17 +167,9 @@ public abstract class Harvest implements Serializable, Comparable<Harvest> {
     	return Harvest.createHarvest(this);
     }
 
-    /**
-     * Compares this Harvest object with the specified Harvest object for order.
-     * Compares value of the year property of the Harvest objects.
-     */
+    @Override
     public int compareTo(Harvest other) {
-        if (this.getYear() < other.getYear()) {
-            return -1;
-        } else if (this.getYear() > other.getYear()) {
-            return 1;
-        } else {
-            return 0;
-        }
+        return Integer.compare(this.getYear(), other.getYear());
     }
+
 }

@@ -142,24 +142,6 @@
           </executions>
         </plugin>
         <plugin>
-          <!-- add Error Prone checks to Java compilation, see https://errorprone.info/docs/installation -->
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <configuration>
-            <compilerArgs>
-              <arg>-XDcompilePolicy=simple</arg>
-              <arg>-Xplugin:ErrorProne</arg>
-            </compilerArgs>
-            <annotationProcessorPaths>
-              <path>
-                <groupId>com.google.errorprone</groupId>
-                <artifactId>error_prone_core</artifactId>
-                <version>2.23.0</version>
-              </path>
-            </annotationProcessorPaths>
-          </configuration>
-        </plugin>
-        <plugin>
           <!-- add JaCoCo runtime agent to tests and allow basic test coverage report creation, see https://www.jacoco.org/jacoco/trunk/doc/maven.html -->
           <groupId>org.jacoco</groupId>
           <artifactId>jacoco-maven-plugin</artifactId>

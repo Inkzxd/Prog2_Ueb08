@@ -1,9 +1,10 @@
 package de.htwsaar.esch.Codeopolis.DomainModel;
 
+import de.htwsaar.esch.Codeopolis.Util.LinkedList;
+import de.htwsaar.esch.Codeopolis.Util.Iterator;
+
 import java.io.Serializable;
 import java.util.Arrays;
-
-import de.htwsaar.esch.Codeopolis.DomainModel.Utilities.LinkedList;
 
 /**
  * Represents the state of a city.
@@ -161,19 +162,28 @@ public class CityState implements Serializable{
      * @return true if this object is the same as the obj argument; false otherwise.
      */
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null || getClass() != obj.getClass()) {
-            return false;
-        }
-        CityState other = (CityState) obj;
-        return residents == other.residents &&
-                acres == other.acres &&
-                year == other.year &&
-                name.equals(other.name) &&
-                Arrays.equals(bushels, other.bushels) &&
-                silos.equals(other.silos);
-    }
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null || getClass() != obj.getClass()) {
+			return false;
+		}
+
+		LinkedList<Silo> other = ((CityState) obj).getSilos();
+		if (this.silos.size() != other.size()) {
+			return false;
+		}
+		Iterator<Silo> it1 = this.getSilos().iterator();
+		Iterator<Silo> it2 = other.iterator();
+		while (it1.hasNext() && it2.hasNext()) {
+			if (!it1.next().equals(it2.next())) {
+				return false;
+			}
+		}
+		return !(it1.hasNext() || it2.hasNext());
+	}
+
+
+
 }

@@ -1,5 +1,7 @@
 package de.htwsaar.esch.Codeopolis.DomainModel.Harvest;
 
+import java.io.Serializable;
+
 import de.htwsaar.esch.Codeopolis.DomainModel.Game;
 
 /**
@@ -7,7 +9,7 @@ import de.htwsaar.esch.Codeopolis.DomainModel.Game;
  * It extends the abstract Harvest class and provides specific implementation
  * for decay and grain type retrieval.
  */
-public class RyeHarvest extends Harvest {
+public class RyeHarvest extends Harvest implements Serializable{
 
     /**
      * Constructs a RyeHarvest object with the specified amount of rye harvested

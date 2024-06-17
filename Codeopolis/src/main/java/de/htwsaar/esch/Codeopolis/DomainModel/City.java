@@ -53,7 +53,7 @@ public class City extends GameEntity {
         this.residents = cityState.getResidents();
         this.year = cityState.getYear();
 
-        this.depot = new Depot(Game.GrainType.values().length, this.config.getSiloCapacity());
+        this.depot = new Depot(cityState.getSilos());  
     }
 
     
