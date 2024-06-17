@@ -1,7 +1,7 @@
 package de.htwsaar.esch.Codeopolis.DomainModel;
 
 import de.htwsaar.esch.Codeopolis.Util.LinkedList;
-import de.htwsaar.esch.Codeopolis.Util.Iterator;
+import java.util.Iterator;
 
 import java.io.Serializable;
 

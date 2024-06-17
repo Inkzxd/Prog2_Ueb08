@@ -1,7 +1,7 @@
 package de.htwsaar.esch.codeopolis.tests;
 
 import de.htwsaar.esch.Codeopolis.Util.LinkedList;
-import de.htwsaar.esch.Codeopolis.Util.Iterator;
+import java.util.Iterator;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

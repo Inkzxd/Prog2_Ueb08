@@ -3,7 +3,9 @@ package de.htwsaar.esch.Codeopolis.Util;
 import java.util.Comparator;
 import java.util.NoSuchElementException;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.Iterator;
 
 /**
  * A generic class for a singly linked list.
@@ -11,7 +13,7 @@ import java.util.function.Predicate;
  *
  * @param <T> The type of elements in the list.
  */
-public class LinkedList<T extends Comparable<T>> {
+public class LinkedList<T extends Comparable<T>> implements Iterable<T> {
     /**
      * Internal node class to hold data and link to the next node.
      */
@@ -193,7 +195,7 @@ public class LinkedList<T extends Comparable<T>> {
      * @return an Iterator instance capable of iterating over the elements of the list in sequence.
      */
     public Iterator<T> iterator() {
-        return new LinkedListIterator();
+        return this.new LinkedListIterator();
     }
 
     private class LinkedListIterator implements Iterator<T> {
@@ -266,12 +268,11 @@ public class LinkedList<T extends Comparable<T>> {
      */
     public LinkedList<T> filter (Predicate<T> predicate) {
         LinkedList<T> result = new LinkedList<>();
-        while (this.iterator().hasNext()) {
-            T current = this.iterator().next();
-            if (predicate.test(current)) {
-                result.addLast(current);
-            }
-        }
+       for (T element : this) {
+           if (predicate.test(element)) {
+               result.addLast(element);
+           }
+       }
         return result;
     }
 
@@ -280,10 +281,10 @@ public class LinkedList<T extends Comparable<T>> {
      *
      * @param  consumer  a function that takes an element of type T and performs some operation on it
      */
-    public void forEach (Consumer<T> consumer) {
-        while (this.iterator().hasNext()) {
-            T current = this.iterator().next();
-            consumer.accept(current);
+
+    public void forEach (Consumer<? super T> consumer) {
+        for (T element : this) {
+            consumer.accept(element);
         }
     }
 
@@ -293,10 +294,9 @@ public class LinkedList<T extends Comparable<T>> {
      * @param  predicate  a function that takes an element of type T and returns a boolean indicating whether the element should be removed
      */
     public void removeIf (Predicate<T> predicate) {
-        while (this.iterator().hasNext()) {
-            T current = this.iterator().next();
-            if (predicate.test(current)) {
-                this.remove(this.getIndexOf(current));
+        for (int i = 0; i < size; i++) {
+            if (predicate.test(this.get(i))) {
+                this.remove(i);
             }
         }
     }
@@ -328,5 +328,13 @@ public class LinkedList<T extends Comparable<T>> {
                 }
             }
         }
+    }
+
+    public double sum (Function<T, Double> function) {
+        double sum = 0;
+        for (T element : this) {
+            sum += function.apply(element);
+        }
+        return sum;
     }
 }

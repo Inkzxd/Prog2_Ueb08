@@ -1,7 +1,7 @@
 package de.htwsaar.esch.Codeopolis.DomainModel;
 
 import de.htwsaar.esch.Codeopolis.DomainModel.Harvest.*;
-import de.htwsaar.esch.Codeopolis.Util.Iterator;
+import java.util.Iterator;
 import de.htwsaar.esch.Codeopolis.Util.LinkedList;
 import java.io.Serializable;
 
@@ -63,14 +63,9 @@ public class Silo implements Serializable, Comparable<Silo>{
         this.stock = other.getStockCopy();
     }
 
-    protected LinkedList<Harvest> getStockCopy()
-    {
+    protected LinkedList<Harvest> getStockCopy() {
         LinkedList<Harvest> copy = new LinkedList<Harvest>();
-        Iterator<Harvest> iterator = this.stock.iterator();
-        while(iterator.hasNext()){
-            Harvest current = iterator.next();
-            copy.addLast(Harvest.createHarvest(current));
-        }
+        stock.forEach(copy::addLast);
         return copy;
     }
 
@@ -135,15 +130,11 @@ public class Silo implements Serializable, Comparable<Silo>{
     public LinkedList<Harvest> emptySilo() {
         if (this.stock.isEmpty()) {
             return null;
-        }
-        else {
+        } else {
             LinkedList<Harvest> removedHarvests = new LinkedList<Harvest>();
-            Iterator<Harvest> iterator = this.stock.iterator();
-            while(iterator.hasNext()){
-                removedHarvests.addLast(iterator.next());
-            }
-            stock.clear();
-            fillLevel = 0;
+            this.stock.forEach(removedHarvests::addLast);
+            this.stock.clear();
+            this.fillLevel = 0;
             return removedHarvests;
         }
     }
@@ -223,23 +214,9 @@ public class Silo implements Serializable, Comparable<Silo>{
      * @return The total amount of grain that decayed in all harvests in the silo.
      */
     public int decay(int currentYear) {
-        int totalDecayedAmount = 0;
-        LinkedList<Integer> empty = new LinkedList<>();
-        Iterator<Harvest> iterator = this.stock.iterator();
-        int i = 0;
-        Harvest currentHarvest;
-        while (iterator.hasNext()){
-            currentHarvest = iterator.next();
-            totalDecayedAmount += currentHarvest.decay(currentYear);
-            if(currentHarvest.getAmount() == 0)
-                empty.addLast(i);
-            i++;
-        }
-        for(int j = 0; j<empty.size(); j++){
-            this.stock.remove(j);
-        }
-        fillLevel -= totalDecayedAmount;
-        return totalDecayedAmount;
+        double totalDecayAmount = this.stock.sum((harvest)-> (double) harvest.decay(currentYear));
+        fillLevel -= totalDecayAmount;
+        return (int) totalDecayAmount;
     }
 
     /**
