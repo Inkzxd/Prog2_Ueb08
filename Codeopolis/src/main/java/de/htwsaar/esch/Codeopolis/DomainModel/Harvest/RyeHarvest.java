@@ -1,7 +1,5 @@
 package de.htwsaar.esch.Codeopolis.DomainModel.Harvest;
 
-import java.io.Serializable;
-
 import de.htwsaar.esch.Codeopolis.DomainModel.Game;
 
 /**
@@ -9,7 +7,7 @@ import de.htwsaar.esch.Codeopolis.DomainModel.Game;
  * It extends the abstract Harvest class and provides specific implementation
  * for decay and grain type retrieval.
  */
-public class RyeHarvest extends Harvest implements Serializable{
+public class RyeHarvest extends Harvest {
 
     /**
      * Constructs a RyeHarvest object with the specified amount of rye harvested
@@ -22,7 +20,6 @@ public class RyeHarvest extends Harvest implements Serializable{
         super(bushels, year);
     }
 
-    
     /**
      * Simulates the decay of rye grain in the harvest over time.
      * Rye has a shelf life of 4 years, after which it starts decaying.

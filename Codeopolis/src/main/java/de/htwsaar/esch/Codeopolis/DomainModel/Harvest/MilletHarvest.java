@@ -1,7 +1,5 @@
 package de.htwsaar.esch.Codeopolis.DomainModel.Harvest;
 
-import java.io.Serializable;
-
 import de.htwsaar.esch.Codeopolis.DomainModel.Game;
 
 /**
@@ -9,7 +7,7 @@ import de.htwsaar.esch.Codeopolis.DomainModel.Game;
  * It extends the abstract Harvest class and provides specific implementation
  * for decay and grain type retrieval.
  */
-public class MilletHarvest extends Harvest implements Serializable{
+public class MilletHarvest extends Harvest {
 
     /**
      * Constructs a MilletHarvest object with the specified amount of millet harvested
@@ -22,7 +20,6 @@ public class MilletHarvest extends Harvest implements Serializable{
         super(bushels, year);
     }
     
-
     /**
      * Simulates the decay of millet grain in the harvest over time.
      * Millet has a shelf life of 4 years, after which it starts decaying.
