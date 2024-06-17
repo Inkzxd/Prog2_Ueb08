@@ -15,7 +15,7 @@ public class CityState implements Serializable{
 	private final int year;
 	private final String name;
 	private final String id;
-	private final LinkedList<?> silos;
+	private final LinkedList<Silo> silos;
 	private final int freeStorage;
 	
 	/**
@@ -30,7 +30,7 @@ public class CityState implements Serializable{
      * @param freeStorage The number of free storage. 
      * @param silos     The array of silos representing the city's grain storage facilities.
      */
-	public CityState(String name, String id, int residents, int[] bushels, int acres, int year, int freeStorage, LinkedList<?> silos) {
+	public CityState(String name, String id, int residents, int[] bushels, int acres, int year, int freeStorage, LinkedList<Silo> silos) {
 		this.name = name;
 		this.id = id;
 		this.residents = residents;
@@ -73,7 +73,7 @@ public class CityState implements Serializable{
      *
      * @return The array of silos.
      */
-    public LinkedList<?> getSilos() {
+    public LinkedList<Silo> getSilos() {
         return silos;
     }
 

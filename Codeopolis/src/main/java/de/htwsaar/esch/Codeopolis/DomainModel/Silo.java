@@ -111,16 +111,16 @@ public class Silo implements Serializable, Comparable<Silo> {
      *         If the silo is empty, an empty array is returned.
      */
     public LinkedList<Harvest> emptySilo() {
-        LinkedList<Harvest> removedHarvests = new LinkedList<>();
-        this.stock.removeIf(harvest -> {
-            removedHarvests.addLast(harvest);
-            return true;
-        });
-        if (!removedHarvests.isEmpty()) {
+        if (stockIndex == -1) {
+            return null;
+        } else {
+            LinkedList<Harvest> removedHarvests = new LinkedList<>();
+            this.stock.forEach(removedHarvests::addLast);
+            stock.clear();
             stockIndex = -1;
             fillLevel = 0;
+            return removedHarvests;
         }
-        return removedHarvests;
     }
 
     /**
@@ -197,14 +197,9 @@ public class Silo implements Serializable, Comparable<Silo> {
      * @return The total amount of grain that decayed in all harvests in the silo.
      */
     public int decay(int currentYear) {
-        int totalDecayedAmount = 0;
-        LinkedList<Harvest>.LinkedIterator<Harvest> iterator = stock.iterator();
-        while (iterator.hasNext()) {
-            Harvest currentHarvest = iterator.next();
-            totalDecayedAmount += currentHarvest.decay(currentYear);
-        }
-        fillLevel -= totalDecayedAmount;
-        return totalDecayedAmount;
+        double totalDecayAmount = this.stock.sum((harvest) -> (double) harvest.decay(currentYear));
+        fillLevel -= totalDecayAmount;
+        return (int) totalDecayAmount;
     }
 
     public Status getStatus() {
@@ -214,4 +209,16 @@ public class Silo implements Serializable, Comparable<Silo> {
     public LinkedList<Harvest> sort () {
         return stock.sort();
     }
+
+    public LinkedList<Harvest> getStockCopy () {
+        LinkedList<Harvest> copy = new LinkedList<>();
+        stock.forEach(copy::addLast);
+        return copy;
+    }
+
+    public void copyStock () {
+        // TODO, es gibt keine Vorgabe
+    }   
+
+
 }

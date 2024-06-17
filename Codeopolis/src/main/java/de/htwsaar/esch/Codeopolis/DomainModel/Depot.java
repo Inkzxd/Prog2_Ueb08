@@ -20,7 +20,7 @@ public class Depot {
      * @param numberOfSilos    The number of silos in the depot.
      * @param capacityPerSilo  The capacity per silo.
      */
-    public Depot(int numberOfSilos, int capacityPerSilo) {
+    public Depot (int numberOfSilos, int capacityPerSilo) {
         this.silos = new LinkedList<>();
         for (int i = 0; i < numberOfSilos; i++) {
             this.silos.addLast(new Silo(capacityPerSilo));
@@ -33,9 +33,9 @@ public class Depot {
      *
      * @param silosArray The array of Silo objects to be copied into the depot.
      */
-    public Depot(LinkedList<Silo> silosList) {
-        this.silos = new LinkedList<>();
-        silos.forEach(silo -> this.silos.addLast(new Silo(silo)));
+    public Depot (LinkedList<Silo> silosList) {
+        this.silos = new LinkedList<Silo>();
+        silos.forEach(this.silos::addLast);
     }
 
     /**
@@ -64,7 +64,7 @@ public class Depot {
     public LinkedList<Silo> getSilos() {
         // Create a new LinkedList and populate it with copies of the Silo objects
         LinkedList<Silo> silosCopy = new LinkedList<>();
-        silos.forEach(silo -> silosCopy.addLast(new Silo(silo)));
+        silos.forEach(silosCopy::addLast);
         return silosCopy;
     }
 
@@ -74,13 +74,7 @@ public class Depot {
      * @return The total amount of bushels stored in the depot.
      */
     public int getTotalFillLevel(){
-    	int totalBushels = 0;
-        LinkedList<Silo>.LinkedIterator<Silo> iterator = this.silos.iterator();
-
-        while (iterator.hasNext()) {
-            totalBushels += iterator.next().getFillLevel();
-        }
-        return totalBushels;
+    	return (int) this.silos.sum((silo) -> (double) silo.getFillLevel());
     }
     
     /**
@@ -136,13 +130,13 @@ public class Depot {
      */
     public int takeOut(int amount, Game.GrainType grainType) {
         int takenAmount = 0;
-        LinkedList<Silo>.LinkedIterator<Silo> iterator = this.silos.iterator();
-        while (iterator.hasNext() && amount > 0) {
-            Silo currentSilo = iterator.next();
-            if (currentSilo.getGrainType() == grainType) {
-                int taken = currentSilo.takeOut(amount);
-                amount -= taken;
-                takenAmount += taken;
+        LinkedList<Silo> silosGrainType = this.silos.filter((silo) -> silo.getGrainType() == grainType);
+        for (int i = 0; i < silosGrainType.size(); i++) {
+            int amountTaken = silos.get(i).takeOut(amount);
+            amount -= amountTaken;
+            takenAmount += amountTaken;
+            if (amount <= 0) {
+                break;
             }
         }
         return takenAmount;
@@ -160,11 +154,7 @@ public class Depot {
     public int takeOut(int amount) {
     	if(amount >= this.getTotalFillLevel()){
     		int totalAmountOfBushels =  this.getTotalFillLevel();
-    		LinkedList<Silo>.LinkedIterator<Silo> iterator = this.silos.iterator();
-            while (iterator.hasNext()) {
-                Silo currentSilo = iterator.next();
-                currentSilo.emptySilo();
-            }
+    		this.silos.forEach(Silo::emptySilo);
     		return totalAmountOfBushels;
     	}
 
@@ -211,16 +201,16 @@ public class Depot {
      */
     public void defragment() {
         LinkedList<Harvest> allHarvests = new LinkedList<>();
-        LinkedList<Silo>.LinkedIterator<Silo> iterator = this.silos.iterator();
-
-       while (iterator.hasNext()) {
-            Silo currentSilo = iterator.next();
-            LinkedList<Harvest> removedHarvests = currentSilo.emptySilo();
-            if (removedHarvests != null) {
-                LinkedList<Harvest>.LinkedIterator<Harvest> harvestIterator = removedHarvests.iterator();
-                while (harvestIterator.hasNext()) {
-                    allHarvests.addLast(harvestIterator.next());
-                }
+        for (int i = 0; i < this.silos.size(); i++) {
+            LinkedList<Harvest> siloHarvests = silos.get(i).emptySilo();
+            siloHarvests = siloHarvests.filter((harvest) -> harvest != null);
+            for (int j = 0; j < siloHarvests.size(); j++) {
+                allHarvests.addLast(siloHarvests.get(j));
+            }
+        }
+        for (int i = 0; i < allHarvests.size(); i++) {
+            if (allHarvests.get(i) != null) {
+                store(allHarvests.get(i));
             }
         }
     }
@@ -313,9 +303,7 @@ public class Depot {
 	@Override
 	public String toString() {
         DepotVisualizer result = new DepotVisualizer();
-        for (int i = 0; i < silos.size(); i++) {
-            result.appendSiloInfo(silos.get(i));
-        }
+        silos.forEach(result::appendSiloInfo);
         return result.visualize();
     }
 
@@ -323,7 +311,7 @@ public class Depot {
         LinkedList<Silo> filteredSilos = new LinkedList<>();
         DepotVisualizer result = new DepotVisualizer();
         filteredSilos.sort(siloComparator);
-        filteredSilos.forEach(silo -> result.appendSiloInfo(silo));
+        filteredSilos.forEach(result::appendSiloInfo);
         return result.visualize();
     }
 

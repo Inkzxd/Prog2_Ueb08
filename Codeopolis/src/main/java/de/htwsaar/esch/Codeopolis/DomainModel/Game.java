@@ -1,7 +1,10 @@
 package de.htwsaar.esch.Codeopolis.DomainModel;
 
+import java.util.Comparator;
 import java.util.Random;
+import java.util.function.Predicate;
 
+import de.htwsaar.esch.Codeopolis.DomainModel.Utilities.DepotVisualizer;
 import de.htwsaar.esch.Codeopolis.Exceptions.*;
 
 /**
@@ -292,5 +295,16 @@ public class Game extends GameEntity{
      */
 	public void quitGame() {
 		this.state = GameState.GAMEOVER;
+	}
+
+	public String getDepotDetails(Predicate<Silo> siloPredicate, Comparator <Silo> siloComparator) {
+		Depot depot = new Depot(this.getCityState().getSilos());
+		if (siloPredicate == null) {
+			siloPredicate = (silo) -> true;
+		}
+		if (siloComparator == null) {
+			siloComparator = Comparator.naturalOrder();
+		}
+		return depot.toString(siloPredicate, siloComparator);
 	}
 }
