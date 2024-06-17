@@ -1,6 +1,9 @@
 package de.htwsaar.esch.Codeopolis.Util;
 
+import java.util.Comparator;
 import java.util.NoSuchElementException;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 /**
  * A generic class for a singly linked list.
@@ -234,6 +237,96 @@ public class LinkedList<T extends Comparable<T>> {
             }
         }
     }
+    /////////////////////////
+    // ---- Uebung 06 ---- //
+    /////////////////////////
 
+    // Hilfsmethode 
+    
+    /**
+     * Finds the index of the first occurrence of a specified element in the list.
+     *
+     * @param  data  the element to search for
+     * @return        the index of the first occurrence of the element, or -1 if not found
+     */
+    public int getIndexOf (T data) {
+        for (int i = 0; i < size; i++) {
+            if (this.get(i).equals(data)) {
+                return i;
+            }
+        }
+        return -1;
+    }
 
+    /**
+     * Filters the elements of this LinkedList based on the given predicate.
+     *
+     * @param predicate A function that takes an element and returns a boolean indicating whether the element should be included in the result.
+     * @return A new LinkedList containing only the elements that satisfy the predicate.
+     */
+    public LinkedList<T> filter (Predicate<T> predicate) {
+        LinkedList<T> result = new LinkedList<>();
+        while (this.iterator().hasNext()) {
+            T current = this.iterator().next();
+            if (predicate.test(current)) {
+                result.addLast(current);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Iterates over each element in the LinkedList and applies the given Consumer to each element.
+     *
+     * @param  consumer  a function that takes an element of type T and performs some operation on it
+     */
+    public void forEach (Consumer<T> consumer) {
+        while (this.iterator().hasNext()) {
+            T current = this.iterator().next();
+            consumer.accept(current);
+        }
+    }
+
+    /**
+     * Removes all elements from the LinkedList that satisfy the given predicate.
+     *
+     * @param  predicate  a function that takes an element of type T and returns a boolean indicating whether the element should be removed
+     */
+    public void removeIf (Predicate<T> predicate) {
+        while (this.iterator().hasNext()) {
+            T current = this.iterator().next();
+            if (predicate.test(current)) {
+                this.remove(this.getIndexOf(current));
+            }
+        }
+    }
+
+    /**
+     * Adds the given data to the end of the list if it satisfies the given predicate.
+     *
+     * @param  data      the data to be added
+     * @param  predicate the predicate that determines whether the data should be added
+     */
+    public void addIf (T data, Predicate<T> predicate) {
+        if (predicate.test(data)) {
+            this.addLast(data);
+        }
+    }
+    
+    /**
+     * Sorts the elements in the LinkedList using the given Comparator.
+     *
+     * @param  comparator  the Comparator used to compare elements in the list
+     */
+    public void sort (Comparator<T> comparator) {
+        for (int i = this.size(); i > 1; i--) {
+            for (int j = 0; j < i - 1; j++) {
+                if (comparator.compare(this.get(j), this.get(j+1)) == 1) {
+                    T temp = this.get(j);
+                    this.set(j, this.get(j+1));
+                    this.set(j+1, temp);
+                }
+            }
+        }
+    }
 }
