@@ -76,12 +76,7 @@ public class Depot {
      * @return The total amount of bushels stored in the depot.
      */
     public int getTotalFillLevel(){
-    	int totalBushels = 0;
-        Iterator<Silo> iterator = this.silos.iterator();
-        while(iterator.hasNext()){
-            totalBushels += iterator.next().getFillLevel();
-        }
-        return totalBushels;
+    	return (int) this.silos.sum((silo) -> (double) silo.getFillLevel());
     }
     
     /**
@@ -323,7 +318,7 @@ public class Depot {
                 int fillLevel = silo.getFillLevel();
                 int capacity = silo.getCapacity();
                 double fillPercentage = (double) fillLevel / capacity * 100;
-                double emptyPercentage = 100 - fillPercentage;
+                //double emptyPercentage = 100 - fillPercentage;  Unused Variable
 
                 // Absolute amount of grain
                 builder.append("Amount of Grain: ").append(fillLevel).append(" units\n");
@@ -360,7 +355,7 @@ public class Depot {
      * @param grainType The grain type for the iterator to focus on.
      * @return An iterator over SiloStatus for the specified grain type.
      */
-    public Iterator iterator(Game.GrainType grainType) {
+    public Iterator<Silo.Status> iterator(Game.GrainType grainType) {
         return new DepotIterator(grainType);
     }
 
@@ -384,7 +379,7 @@ public class Depot {
      *
      * @see Silo.Status
      */
-    private class DepotIterator implements Iterator {
+    private class DepotIterator implements Iterator<Silo.Status> {
         private int currentIndex = 0;
         private Game.GrainType grainType;
 
