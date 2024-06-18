@@ -5,6 +5,7 @@ import de.htwsaar.esch.Codeopolis.DomainModel.Silo;
 import de.htwsaar.esch.Codeopolis.DomainModel.Game.GrainType;
 
 import java.util.Comparator;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.function.Predicate;
 
@@ -46,9 +47,7 @@ public class DepotDetailsDialog {
                     System.out.println(game.getDepotDetails(null, null));
                     break; // Added break statement
                 case 2:
-                    ...getFilterCriteria();
-                    ...getComparatorCriteria();
-                    System.out.println(game.getDepotDetails(filter, comparator));
+                   System.out.println(game.getDepotDetails(getFilterCriteria(), getComparatorCriteria()));
                     break;
                 case 3:
                     System.out.println("Exiting...");
@@ -79,7 +78,7 @@ public class DepotDetailsDialog {
                 String grainTypeInput = scanner.nextLine().toUpperCase();
                 try {
                     GrainType grainType = GrainType.valueOf(grainTypeInput);
-                    return ...
+                    return (silo) -> silo.getGrainType().equals(grainType);
                 } catch (IllegalArgumentException e) {
                     System.out.println("Invalid grain type. No filter will be applied.");
                     return null;
@@ -87,11 +86,11 @@ public class DepotDetailsDialog {
             case 2:
                 System.out.println("Enter the minimum fill level:");
                 int minFillLevel = Integer.parseInt(scanner.nextLine());
-                return ...
+                return (silo) -> silo.getFillLevel() > minFillLevel;
             case 3:
                 System.out.println("Enter the maximum fill level:");
                 int maxFillLevel = Integer.parseInt(scanner.nextLine());
-                return ...
+                return (silo) -> silo.getFillLevel() < maxFillLevel;
             case 4:
                 return null;
             default:
@@ -117,13 +116,16 @@ public class DepotDetailsDialog {
 
         switch (choice) {
             case 1:
-                return ...
+                return (silo1, silo2) -> silo1.getGrainType().equals(silo2.getGrainType()) ? 0 : 1;
             case 2:
-                return ...
+                return (silo1, silo2) -> Integer.compare(silo1.getFillLevel(), silo2.getFillLevel());
             case 3:
-                return ...
+                return (silo1, silo2) -> Integer.compare(silo1.getCapacity(), silo2.getCapacity());
             case 4:
-                return ...
+                return (silo1, silo2) -> { 
+                    Random rand = new Random();
+                    return rand.nextInt(-1, 1);
+                };
             case 5:
                 return null;
             default:
