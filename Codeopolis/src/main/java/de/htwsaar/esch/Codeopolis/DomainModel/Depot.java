@@ -7,8 +7,6 @@ import de.htwsaar.esch.Codeopolis.Util.LinkedList;
 
 import java.util.Comparator;
 import java.util.Iterator;
-
-import java.text.DecimalFormat;
 import java.util.NoSuchElementException;
 import java.util.function.Predicate;
 
