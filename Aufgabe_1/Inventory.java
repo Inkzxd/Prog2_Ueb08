@@ -1,10 +1,14 @@
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 public class Inventory {
+
+    private List<Product> inventory;
     
     public Inventory () {
-        List<Product> inventory = new HashMap();
+        List<Product> inventory = new ArrayList<>();
     }
 
     public void addProduct(Product product) {
@@ -31,7 +35,7 @@ public class Inventory {
     }
 
     public List<Product> findProductsByCategory (String category) {
-        List<Product> productsByCategory = new HashMap();
+        List<Product> productsByCategory = new ArrayList<>();
         for (Product product : inventory) {
             if (product.getCategory().equals(category)) {
                 productsByCategory.add(product);
@@ -53,7 +57,7 @@ public class Inventory {
     }
 
     public List<Product> getLowStockProducts (int threshold) {
-        List<Product> lowStockProducts = new HashMap();
+        List<Product> lowStockProducts = new ArrayList<>();
         for (Product product : inventory) {
             if (product.getQuantity() < threshold) {
                 lowStockProducts.add(product);
@@ -63,7 +67,7 @@ public class Inventory {
     }
 
     public List<Product> filterProducts (Predicate<Product> predicate) {
-        List<Product> filteredProducts = new HashMap();
+        List<Product> filteredProducts = new ArrayList<>();
         for (Product product : inventory) {
             if (predicate.test(product)) {
                 filteredProducts.add(product);
