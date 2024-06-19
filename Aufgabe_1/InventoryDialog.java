@@ -1,10 +1,11 @@
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 public class InventoryDialog {
 
     private Scanner scanner;
-    private Product product;
+    private Inventory inventory;
 
     private static final int ADD_PRODUCT = 1;
     private static final int REMOVE_PRODUCT = 2;
@@ -23,7 +24,7 @@ public class InventoryDialog {
     }
 
     private void start () {
-        Inventory inventory = new Inventory();
+        inventory = new Inventory();
         int function = -1;
         do {
             try {
@@ -40,18 +41,24 @@ public class InventoryDialog {
     }
 
     private int userInput () {
-        System.out.println("-------- Main menu --------\n"              +
-                            ADD_PRODUCT                                 + " - Add product\n"                +
-                            REMOVE_PRODUCT                              + " - Remove product\n"             +
-                            FIND_PRODUCT_BY_ID                          + " - Find product by ID\n"         +
-                            SHOW_PRODUCTS_BY_CATEGORY                   + " - Show products by category\n"  +
-                            SHOW_ALL_PRODUCTS                           + " - Show all products\n"          +
-                            SORT_PRODUCTS_BY_NAME                       + " - Sort products by name\n"      +
-                            SORT_PRODUCTS_BY_PRICE                      + " - Sort products by price\n"     +
-                            SHOW_LOW_STOCK_PRODUCTS                     + " - Show low stock products\n"    +
-                            FILTER_PRODUCTS                             + " - Filter products\n"            +
-                            CHANGE_PRICES_PERCENTAGE                    + " - Change prices percentage\n"   +
-                            PROGRAM_EXIT                                + " - Exit\n");
+        System.out.println("-------- Main menu --------\n"   +
+        ADD_PRODUCT                             + " - Add product\n"                +
+                                                "---------------------------");              
+        
+        if (inventory.getSize() > 0) {
+            System.out.println(REMOVE_PRODUCT   + " - Remove product\n"             +
+            FIND_PRODUCT_BY_ID                  + " - Find product by ID\n"         +
+            SHOW_PRODUCTS_BY_CATEGORY           + " - Show products by category\n"  +
+            SHOW_ALL_PRODUCTS                   + " - Show all products\n"          +
+            SORT_PRODUCTS_BY_NAME               + " - Sort products by name\n"      +
+            SORT_PRODUCTS_BY_PRICE              + " - Sort products by price\n"     +
+            SHOW_LOW_STOCK_PRODUCTS             + " - Show low stock products\n"    +
+            FILTER_PRODUCTS                     + " - Filter products\n"            +
+            CHANGE_PRICES_PERCENTAGE            + " - Change prices percentage\n"   +
+                                                  "---------------------------");
+        }
+        System.out.println(PROGRAM_EXIT         + " - Exit\n");
+        System.out.print("Enter menu option: ");
         return scanner.nextInt();
     }
 
@@ -87,7 +94,9 @@ public class InventoryDialog {
             case CHANGE_PRICES_PERCENTAGE:
                 changePricesPercentage();
                 break;
-            case PROGRAM_EXIT:
+            case PROGRAM_EXIT: 
+                System.out.println("Shutting down...");
+                System.exit(0);
                 break;
             default:
                 throw new IllegalArgumentException("Invalid function");
@@ -95,35 +104,87 @@ public class InventoryDialog {
     }
 
     private void addProduct () {
-        // TODO
+        System.out.println("Enter product details:");
+        System.out.print("Product ID: ");
+        int productId = scanner.nextInt();
+        System.out.print("Name: ");
+        String name = scanner.next();
+        scanner.nextLine();
+        System.out.print("Category: ");
+        String category = scanner.next();
+        System.out.print("Price: ");
+        double price = scanner.nextDouble();
+        System.out.print("Quantity: ");
+        int quantity = scanner.nextInt();
+        Product product = new Product(productId, name, category, price, quantity);
+        inventory.addProduct(product);
     }
 
     private void removeProduct () {
-        // TODO
+        if (inventory.getSize() == 0) {
+            System.out.println("Inventory is empty");
+            return;
+        }
+        System.out.print("Enter product ID: ");
+        int productId = scanner.nextInt();
+        Product product = inventory.findProductById(productId);
+        if (product == null) {
+            System.out.println("Product not found");
+            return;
+        } else {
+            inventory.removeProduct(productId);
+            System.out.println("Product removed: \n" + product); 
+        }
     }
 
     private void findProductById () {
-        // TODO
+        if (inventory.getSize() == 0) {
+            System.out.println("Inventory is empty");
+            return;
+        }
+        System.out.print("Enter product ID: ");
+        int productId = scanner.nextInt();
+        Product product = inventory.findProductById(productId);
+        if (product == null) {
+            System.out.println("No product with ID " + productId + " found");
+        } else {
+            System.out.println("Product found: \n" + product);
+        }
     }
 
     private void showProductsByCategory () {
-        // TODO
+        if (inventory.getSize() == 0) {
+            System.out.println("Inventory is empty");
+            return;
+        }
+        System.out.print("Enter category: ");
+        String category = scanner.next();
+        List<Product> products = inventory.findProductsByCategory(category);
+        if (products.isEmpty()) {
+            System.out.println("No products found in category " + category);
+        } else {
+            System.out.println("Products in category " + category + ": \n" + products.toString());
+        }
     }
 
     private void showAllProducts () {
-        // TODO
+        System.out.println(inventory);
     }
 
     private void sortProductsByName () {
-        // TODO
+        inventory.sortProductsByName();
+        System.out.println(inventory);
     }
 
     private void sortProductsByPrice () {
-        // TODO
+        inventory.sortProductsByPrice();
+        System.out.println(inventory);
     }
 
     private void showLowStockProducts () {
-        // TODO
+        System.out.println("Please enter stock threshold: ");
+        int threshold = scanner.nextInt();
+        System.out.println(inventory.getLowStockProducts(threshold));
     }
 
     private void filterProducts () {
@@ -131,7 +192,10 @@ public class InventoryDialog {
     }
 
     private void changePricesPercentage () {
-        // TODO
+        System.out.println("Please enter percentage: ");
+        double percentage = scanner.nextDouble();
+        inventory.applyToProducts(product -> product.setPrice(product.getPrice() * (1 + percentage / 100)));
+        System.out.println("Prices for all products changed by " + percentage + "%");
     }
 
     public static void main (String[] args) {

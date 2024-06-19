@@ -5,14 +5,19 @@ import java.util.function.Predicate;
 
 public class Inventory {
 
-    private List<Product> inventory;
+    private ArrayList<Product> inventory;
     
     public Inventory () {
-        List<Product> inventory = new ArrayList<>();
+        this.inventory = new ArrayList<>();
     }
 
     public void addProduct(Product product) {
-        inventory.add(product);
+        findProductById(product.getProductId());
+        if (findProductById(product.getProductId()) == null) {
+            inventory.add(product);
+        } else {
+            throw new IllegalArgumentException("Product with this ID already exists");
+        }
     }
 
     public boolean removeProduct(int productId) {
@@ -80,5 +85,18 @@ public class Inventory {
         for (Product product : inventory) {
             consumer.accept(product);
         }
+    }
+
+    public int getSize() {
+        return inventory.size();
+    }
+
+    public String toString () {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Inventory overview: \n").append("Number of products: ").append(getSize()).append("\n").append("------------------\n");
+        for (Product product : inventory) {
+            sb.append(product.toString()).append("\n------------------\n");
+        }
+        return sb.toString();
     }
 }

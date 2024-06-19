@@ -94,15 +94,15 @@ public class Product {
 
     @Override
     public String toString() {
-        return "Product: " + name + "\n" +
-                "Product ID: " + productId + "\n" +
-                "Category: " + category + "\n" +
-                "Price: " + df.format(price) + "€\n" +
-                "Quantity: " + quantity + "\n";
+        return "Product name: " + getName() + "\n" +
+                "Product ID: " + getProductId() + "\n" +
+                "Category: " + getCategory() + "\n" +
+                "Price: " + df.format(getPrice()) + " Euro\n" +
+                "Quantity: " + getQuantity();
     }
 
     public static void main(String[] args) {
-        Product product = new Product(1, "Apple", "Fruit", 0.5, 10);
-        System.out.println(product);
+        Product product = new Product(1, "Product 1", "Category 1", 10.0, 5);
+        System.out.println(product.toString());
     }
 }
