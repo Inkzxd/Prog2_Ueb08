@@ -1,6 +1,7 @@
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
+import java.util.function.Predicate;
 
 public class InventoryDialog {
 
@@ -188,7 +189,30 @@ public class InventoryDialog {
     }
 
     private void filterProducts () {
-        // TODO
+        System.out.println("Please enter filter (name, category, price): ");
+        String filter = scanner.next().toLowerCase();
+        Predicate<Product> predicate;
+        switch (filter) {
+            case "name":
+                System.out.print("Enter name: ");
+                String name = scanner.next();
+                predicate = product -> product.getName().equals(name);
+                break;
+            case "category":
+                System.out.print("Enter category: ");
+                String category = scanner.next();
+                predicate = product -> product.getCategory().equals(category);
+                break;
+            case "price":
+                System.out.println("Please enter price: ");
+                double price = scanner.nextDouble();
+                predicate = product -> product.getPrice() == price;
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid filter");
+        }
+        List<Product> filteredProducts = inventory.filterProducts(predicate);
+        System.out.println("Filtered products: \n" + filteredProducts);
     }
 
     private void changePricesPercentage () {
