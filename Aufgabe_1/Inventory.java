@@ -21,13 +21,7 @@ public class Inventory {
     }
 
     public boolean removeProduct(int productId) {
-        for (Product product : inventory) {
-            if (product.getProductId() == productId) {
-                inventory.remove(product);
-                return true;
-            }
-        }
-        return false;
+        return productMap.remove(productId) != null;
     }
 
     public Product findProductById (int productId) {
