@@ -1,11 +1,9 @@
 import java.text.DecimalFormat;
 
 public class Product {
-    private int productId;
-    private String name;
-    private String category;
+    private int productId, quantity;
+    private String name, category;
     private double price;
-    private int quantity;
 
     private DecimalFormat df = new DecimalFormat("#.00");
 
