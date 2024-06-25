@@ -169,17 +169,17 @@ public class InventoryDialog {
     }
 
     private void showAllProducts () {
-        System.out.println(inventory);
+        System.out.println(inventory.toString());
     }
 
     private void sortProductsByName () {
         inventory.sortProductsByName();
-        System.out.println(inventory);
+        System.out.println(inventory.toString());
     }
 
     private void sortProductsByPrice () {
         inventory.sortProductsByPrice();
-        System.out.println(inventory);
+        System.out.println(inventory.toString());
     }
 
     private void showLowStockProducts () {
@@ -212,7 +212,7 @@ public class InventoryDialog {
                 throw new IllegalArgumentException("Invalid filter");
         }
         List<Product> filteredProducts = inventory.filterProducts(predicate);
-        System.out.println("Filtered products: \n" + filteredProducts);
+        System.out.println("Filtered products: \n" + filteredProducts.toString());
     }
 
     private void changePricesPercentage () {
