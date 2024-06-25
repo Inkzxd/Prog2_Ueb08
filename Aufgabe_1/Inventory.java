@@ -25,7 +25,7 @@ public class Inventory {
      * @param  product  the product to be added
      * @throws IllegalArgumentException if a product with the same ID already exists in the inventory
      */
-    public void addProduct(Product product) {
+    public void addProduct (Product product) {
         findProductById(product.getProductId());
         if (findProductById(product.getProductId()) == null) {
             inventory.add(product);
@@ -39,7 +39,7 @@ public class Inventory {
      * @param  productId   the ID of the product to be removed
      * @return true if the product was successfully removed, false otherwise
      */
-    public boolean removeProduct(int productId) {
+    public boolean removeProduct (int productId) {
         return inventory.remove(findProductById(productId));
     }
 
