@@ -1,7 +1,9 @@
-import java.util.Deque;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Set;
+import java.util.List;
+import java.util.TreeSet;
 
 /**
  * Class that represents a consumer of numbers.
@@ -9,125 +11,84 @@ import java.util.Set;
  * @version 1.0
  */
 public class Consumer {
-    private HashMap<Integer, LinkedList<Long>> counter;
-    private long baseNanos;
-
+    private HashMap<Integer, List<Long>> counter;
 
     /**
      * Constructor for objects of class Consumer
      */
     public Consumer() {
-        this.counter = new HashMap<>();
-        baseNanos = System.nanoTime();
+       this.counter = new HashMap<>();
     }
-    
 
     /**
-     * Consumes an integer, calculates the cross total, records the timestamp,
-     * and updates the counter with the timestamp for the cross total.
-     *
-     * @param  i  the integer to consume
+     * Consumes a value and updates the counter accordingly.
+     * @param value the value to be consumed
      */
-    public void consume(int i) {
-        int result ;
-        long timestamp;
+    public void consume (int value) {
+        int crossTotal = calculateCrosstotal(value);
+        long timestamp = System.currentTimeMillis();
 
-        result = crossTotal(i);
-        timestamp = System.nanoTime() - baseNanos;
-   
-        System.out.println( "I consumed "                      + i + 
-                            " and calculated the cross total " + result +
-                            ".  I recorded the timestamp: "    + timestamp );
-
-        if (counter.get(result) == null) {
-            LinkedList<Long> longList = new LinkedList<>();
-            longList.add(timestamp);
-            counter.put(result, longList);
-        } else {
-            counter.get(result).add(timestamp);
-        }
+        counter.putIfAbsent(crossTotal, new ArrayList<>());
+        counter.get(crossTotal).add(timestamp);
     }
-    
-
 
     /**
-     * Calculates the cross total of a given integer by summing up the digits of the integer.
-     *
-     * @param  i  the integer to calculate the cross total from
-     * @return    the cross total of the integer
+     * Calculates the cross total of a given number.
+     * @param  value the number for which the cross total is to be calculated
+     * @return the cross total of the given number
      */
-    public int crossTotal( int i ) {
-        int result = 0;
-   
-        while (0 != i ) {
-            result += i % 10;            // add last digit to result
-            i      /= 10;                // remove last digit 
+    public int calculateCrosstotal  (int value) {
+        int sum = 0;
+        while (value > 0) {
+            sum += value % 10;
+            value /= 10;
         }
-        return result;
+        return sum;
     }
-    
-   
+
     /**
-     * Returns the number of different results stored in the counter.
-     *
+     * Calculates the number of different results in the counter.
      * @return the number of different results
      */
-    public int numberOfDifferentResults() {
-        return this.counter.keySet().size();
+    public int numberOfDifferentResults () {
+        return counter.size();
+    }
+
+    /**
+     * Calculates the number of occurrences of a given cross total in the counter.
+     * @param  crossTotal the cross total for which the number of occurrences is to be calculated
+     * @return the number of occurrences of the given cross total
+     */
+    public int numberOfOccurrences (int crossTotal) {
+        return counter.get(crossTotal).size();
+    }
+
+    /**
+     * Returns a collection of cross totals in ascending order.
+     * @return a collection of integers representing the cross totals in ascending order
+     */
+    public Collection<Integer> getCrossTotalsAscending () {
+        return new TreeSet<>(counter.keySet());
+    }
+
+    /**
+     * Returns a collection of cross totals in descending order.
+     * @return a collection of integers representing the cross totals in descending order
+     */
+    public Collection<Integer> getCrossTotalDescending () {
+        TreeSet<Integer> sorted = new TreeSet<>(Collections.reverseOrder());
+        sorted.addAll(counter.keySet());
+        return sorted;
     }
     
-   
     /**
-     * A description of the entire Java function.
+     * Retrieves the collection of timestamps associated with the given cross total.
      *
-     * @param  i  description of parameter
-     * @return    description of return value
+     * @param  crossTotal the cross total for which the timestamps are to be retrieved
+     * @return the collection of timestamps associated with the given cross total,
+     *         or an empty collection if no timestamps are found
      */
-    public int numberOfOccurrences( int i ) {
-       if ( this.counter.containsKey( i ) ) {
-        return this.counter.get( i ).size();
-       }
-       return 0;
-    }
-    
-   
-    /**
-     * Returns a set of integers representing the cross totals in ascending order.
-     *
-     * @return a set of integers in ascending order
-     */
-    public Set<Integer> getCrossTotalsAscending() {
-        return this.counter.keySet();
-    }
-    
-   
-    /**
-     * Returns a set of integers representing the cross totals in descending order.
-     *
-     * @return a set of integers in descending order
-     */
-    public Set<Integer> getCrossTotalsDescending() {
-        return this.counter.keySet().descendingSet();	
-    }
-    
-   
-    /**
-     * Retrieves the timestamps for a specific result.
-     *
-     * @param  i the result for which to retrieve the timestamps
-     * @return    a deque containing the timestamps for the specified result
-     */
-    public Deque<Long> getTimestampsForResult( int i ) {
-        return this.counter.get( i );
-    }
-    
-   
-    /**
-     * Retrieves the base nanoseconds value.
-     *
-     * @return the base nanoseconds value
-     */
-    public long getBaseNanos() {
-        return this.baseNanos;
+    public Collection<Long> getTimestamps (int crossTotal) {
+        return counter.getOrDefault(crossTotal, Collections.emptyList());
     }
 }

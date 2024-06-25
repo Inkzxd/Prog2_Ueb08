@@ -21,10 +21,6 @@ public class Producer {
     * @return the generated product number
     */
     public int produce () {
-      int product = random.nextInt(1001);
-
-      System.out.println("Product: " + product);
-
-      return product;
+      return random.nextInt(1001);
    }
 }
