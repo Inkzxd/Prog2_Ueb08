@@ -7,12 +7,17 @@ import java.util.Random;
 import java.util.Set;
 import java.util.Iterator;
 
-
+/**
+ * Main class for use of the consumer and producer classes.
+ * @author Christian Petry, Zudong Xhang
+ * @version 1.0
+ */
 public class MainClass {
+   // Strings for printing
    private static final String AUFRUF = "Aufruf:  java Loesung20_1 { 'fifo' | 'prio' }" ;
    private static final String VERSUCH = "Versuchen Sie es noch einmal !!!" ;
 
-
+   // 
    private Queue<Integer> tasks;
    private Producer producer;
    private Consumer consumer;

@@ -1,21 +1,30 @@
 import java.util.Random;
 
+/**
+ * Class that represents a producer of numbers.	
+ * @author Christian Petry, Zudong Xhang
+ * @version 1.0
+ */
 public class Producer {
-    private Random random;
+   // Random number generator
+   private Random random;
 
-    public Producer () {
-       this.random = new Random();
-    }
+   /**
+    * Constructor for the producer.
+    */
+   public Producer () {
+      this.random = new Random();
+   }
 
    /**
     * Generates a random product number between 0 and 1000 and prints it to the console.
     * @return the generated product number
     */
     public int produce () {
-       int product = random.nextInt(1001);
+      int product = random.nextInt(1001);
 
-       System.out.println("Product: " + product);
+      System.out.println("Product: " + product);
 
-       return product;
-    }
+      return product;
+   }
 }
