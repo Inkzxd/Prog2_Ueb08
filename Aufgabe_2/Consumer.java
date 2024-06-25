@@ -67,7 +67,7 @@ public class Consumer {
      * Returns a collection of cross totals in ascending order.
      * @return a collection of integers representing the cross totals in ascending order
      */
-    public Collection<Integer> getCrossTotalsAscending () {
+    public TreeSet<Integer> getCrossTotalsAscending () {
         return new TreeSet<>(counter.keySet());
     }
 
@@ -75,7 +75,7 @@ public class Consumer {
      * Returns a collection of cross totals in descending order.
      * @return a collection of integers representing the cross totals in descending order
      */
-    public Collection<Integer> getCrossTotalDescending () {
+    public TreeSet<Integer> getCrossTotalDescending () {
         TreeSet<Integer> sorted = new TreeSet<>(Collections.reverseOrder());
         sorted.addAll(counter.keySet());
         return sorted;
@@ -89,6 +89,6 @@ public class Consumer {
      *         or an empty collection if no timestamps are found
      */
     public Collection<Long> getTimestamps (int crossTotal) {
-        return counter.getOrDefault(crossTotal, Collections.emptyList());
+        return counter.get(crossTotal);
     }
 }

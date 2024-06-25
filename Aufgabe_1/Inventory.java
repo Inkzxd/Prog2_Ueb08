@@ -30,7 +30,7 @@ public class Inventory {
         if (findProductById(product.getProductId()) == null) {
             inventory.add(product);
         } else {
-            throw new IllegalArgumentException("Product with this ID already exists");
+            throw new IllegalArgumentException("Produkt mit dieser ID existiert bereits");
         }
     }
 
@@ -152,7 +152,7 @@ public class Inventory {
      */
     public String toString () {
         StringBuilder sb = new StringBuilder();
-        sb.append("Inventory overview: \n").append("Number of products: ").append(getSize()).append("\n").append("------------------\n");
+        sb.append("Inventar-Uebersicht: \n").append("Anzahl Produkte: ").append(getSize()).append("\n").append("------------------\n");
         for (Product product : inventory) {
             sb.append(product.toString()).append("\n------------------\n");
         }

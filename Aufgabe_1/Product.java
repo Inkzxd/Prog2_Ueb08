@@ -37,7 +37,7 @@ public class Product {
      */
     public static void validateProductId (int productId) {
         if (productId < 0) {
-            throw new IllegalArgumentException("Product ID must be greater than 0");
+            throw new IllegalArgumentException("Die Produkt-ID muss groesser als 0 sein");
         }
     }
 
@@ -48,7 +48,7 @@ public class Product {
      */
     public static void validateName (String name) {
         if (name == null || name.isEmpty()) {
-            throw new IllegalArgumentException("Name must not be empty");
+            throw new IllegalArgumentException("Der Name darf nicht leer sein");
         }
     }
 
@@ -59,7 +59,7 @@ public class Product {
      */
     public static void validateCategory (String category) {
         if (category == null || category.isEmpty()) {
-            throw new IllegalArgumentException("Category must not be empty");
+            throw new IllegalArgumentException("Die Produktkategorie darf nicht leer sein");
         }
     }
 
@@ -70,7 +70,7 @@ public class Product {
      */
     public static void validatePrice (double price) {
         if (price < 0) {
-            throw new IllegalArgumentException("Price must be greater than 0");
+            throw new IllegalArgumentException("Der Preis muss hoeher als 0 sein");
         }
     }
 
@@ -81,7 +81,7 @@ public class Product {
      */
     public static void validateQuantity (int quantity) {
         if (quantity < 0) {
-            throw new IllegalArgumentException("Quantity must be greater than 0");
+            throw new IllegalArgumentException("Die Anzahl muss hoeher als 0 sein");
         }
     }
 
@@ -180,10 +180,10 @@ public class Product {
      */
     @Override
     public String toString() {
-        return "Product name: " + getName() + "\n" +
-                "Product ID: " + getProductId() + "\n" +
-                "Category: " + getCategory() + "\n" +
-                "Price: " + df.format(getPrice()) + " Euro\n" +
-                "Quantity: " + getQuantity();
+        return "Product-Name: " + getName() + "\n" +
+                "Produkt-ID: " + getProductId() + "\n" +
+                "Kategorie: " + getCategory() + "\n" +
+                "Preis: " + df.format(getPrice()) + " Euro\n" +
+                "Anzahl: " + getQuantity();
     }
 }

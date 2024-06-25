@@ -23,9 +23,9 @@ public class InventoryDialog {
     private static final int PROGRAM_EXIT = 11;
 
     // Error messages
-    private static final String INVALID_NUMBER = "Invalid number, please enter a number between " + ADD_PRODUCT + " and " + PROGRAM_EXIT + ".";
-    private static final String INVALID_INPUT = "Invalid input, please enter a number.";
-    private static final String INVENTORY_EMPTY = "Inventory is empty, please add a product first.";
+    private static final String INVALID_NUMBER  = "Ungueltige Zahl, bitte gib eine Zahl zwischen " + ADD_PRODUCT + " und " + PROGRAM_EXIT + ".";
+    private static final String INVALID_INPUT   = "Ungueltige Eingabe, bitte gib eine Zahl ein.";
+    private static final String INVENTORY_EMPTY = "Das Inventar ist leer, bitte fuege zuerst ein Produkt hinzu.";
 
 
     /**
@@ -67,23 +67,23 @@ public class InventoryDialog {
      * @throws InputMismatchException if the user enters an invalid input
      */
     private int userInput () {
-        System.out.println("-------- Main menu --------\n"   +
-        ADD_PRODUCT                             + " - Add product\n"                +
+        System.out.println("-------- Hauptmenue --------\n"   +
+        ADD_PRODUCT                             + " - Produkt hinzufuegen\n" +
                                                 "---------------------------");              
         if (inventory.getSize() > 0) {
-            System.out.println(REMOVE_PRODUCT   + " - Remove product\n"             +
-            FIND_PRODUCT_BY_ID                  + " - Find product by ID\n"         +
-            SHOW_PRODUCTS_BY_CATEGORY           + " - Show products by category\n"  +
-            SHOW_ALL_PRODUCTS                   + " - Show all products\n"          +
-            SORT_PRODUCTS_BY_NAME               + " - Sort products by name\n"      +
-            SORT_PRODUCTS_BY_PRICE              + " - Sort products by price\n"     +
-            SHOW_LOW_STOCK_PRODUCTS             + " - Show low stock products\n"    +
-            FILTER_PRODUCTS                     + " - Filter products\n"            +
-            CHANGE_PRICES_PERCENTAGE            + " - Change prices percentage\n"   +
+            System.out.println(REMOVE_PRODUCT   + " - Produkt entfernen\n"                          +
+            FIND_PRODUCT_BY_ID                  + " - Produkt anhand von ID finden\n"               +
+            SHOW_PRODUCTS_BY_CATEGORY           + " - Produkte in einer Kategorie anzeigen\n"       +
+            SHOW_ALL_PRODUCTS                   + " - Alle Produkte anzeigen\n"                     +
+            SORT_PRODUCTS_BY_NAME               + " - Produkte nach Name sortieren\n"               +
+            SORT_PRODUCTS_BY_PRICE              + " - Produkte nach Preis sortieren\n"              +
+            SHOW_LOW_STOCK_PRODUCTS             + " - Produkte mit niedrigem Bestand anzeigen\n"    +
+            FILTER_PRODUCTS                     + " - Produkte filtern\n"                           +
+            CHANGE_PRICES_PERCENTAGE            + " - Preise prozentual anpassen\n"                 +
                                                   "---------------------------");
         }
-        System.out.println(PROGRAM_EXIT         + " - Exit\n");
-        System.out.print("Enter menu option: ");
+        System.out.println(PROGRAM_EXIT         + " - Programm beenden\n");
+        System.out.print("Bitte Menuoption auswaehlen: ");
         return scanner.nextInt();
     }
 
@@ -137,17 +137,17 @@ public class InventoryDialog {
      * @throws InputMismatchException if the user input is not of the expected type
      */
     private void addProduct () {
-        System.out.println("Enter product details:");
-        System.out.print("Product ID: ");
+        System.out.println("Produktdetails:");
+        System.out.print("Produkt-ID: ");
         int productId = scanner.nextInt();
         System.out.print("Name: ");
         String name = scanner.next();
         scanner.nextLine();
-        System.out.print("Category: ");
+        System.out.print("Kategorie: ");
         String category = scanner.next();
-        System.out.print("Price: ");
+        System.out.print("Preis: ");
         double price = scanner.nextDouble();
-        System.out.print("Quantity: ");
+        System.out.print("Anzahl: ");
         int quantity = scanner.nextInt();
         Product product = new Product(productId, name, category, price, quantity);
         inventory.addProduct(product);
@@ -162,15 +162,15 @@ public class InventoryDialog {
             System.out.println(INVENTORY_EMPTY);
             return;
         }
-        System.out.print("Enter product ID: ");
+        System.out.print("Bitte Produkt-ID eingeben: ");
         int productId = scanner.nextInt();
         Product product = inventory.findProductById(productId);
         if (product == null) {
-            System.out.println("No product with ID " + productId + " found");
+            System.out.println("Es wurde kein Produkt mit der ID " + productId + " gefunden");
             return;
         } else {
             inventory.removeProduct(productId);
-            System.out.println("Product removed: \n" + product); 
+            System.out.println("Produkt entfernt: \n" + product); 
         }
     }
 
@@ -183,13 +183,13 @@ public class InventoryDialog {
             System.out.println(INVENTORY_EMPTY);
             return;
         }
-        System.out.print("Enter product ID: ");
+        System.out.print("Bitte Produkt-ID eingeben: ");
         int productId = scanner.nextInt();
         Product product = inventory.findProductById(productId);
         if (product == null) {
-            System.out.println("No product with ID " + productId + " found");
+            System.out.println("Es wurde kein Produkt mit der ID " + productId + " gefunden");
         } else {
-            System.out.println("Product found: \n" + product);
+            System.out.println("Produkt gefunden: \n" + product);
         }
     }
 
@@ -201,13 +201,13 @@ public class InventoryDialog {
             System.out.println(INVENTORY_EMPTY);
             return;
         }
-        System.out.print("Enter category: ");
+        System.out.print("Bitte Kategorie eingeben: ");
         String category = scanner.next();
         List<Product> products = inventory.findProductsByCategory(category);
         if (products.isEmpty()) {
-            System.out.println("No products found in category " + category);
+            System.out.println("Es wurden keine Produkte in der Kategorie " + category + " gefunden");
         } else {
-            System.out.println("Products in category " + category + ": \n" + products.toString());
+            System.out.println("Produkte in der Kategorie " + category + ": \n" + products.toString());
         }
     }
 
@@ -259,7 +259,7 @@ public class InventoryDialog {
             System.out.println(INVENTORY_EMPTY);
             return;
         }
-        System.out.println("Please enter stock threshold: ");
+        System.out.println("Bitte Grenzwert eingeben: ");
         int threshold = scanner.nextInt();
         System.out.println(inventory.getLowStockProducts(threshold));
     }
@@ -273,35 +273,35 @@ public class InventoryDialog {
             System.out.println(INVENTORY_EMPTY);
             return;
         }
-        System.out.println("Please enter filter (name, category, price, quantity): ");
+        System.out.println("Bitte Filter-Typ eingeben (Name, Kategorie, Preis, Anzahl): ");
         String filter = scanner.next().toLowerCase();
         Predicate<Product> predicate;
         switch (filter) {
             case "name":
-                System.out.print("Enter name: ");
+                System.out.print("Bitte Name eingeben: ");
                 String name = scanner.next();
-                predicate = product -> product.getName().equals(name);
+                predicate = product -> product.getName().contains(name);
                 break;
-            case "category":
-                System.out.print("Enter category: ");
+            case "kategorie":
+                System.out.print("Bitte Kategorie eingeben: ");
                 String category = scanner.next();
                 predicate = product -> product.getCategory().equals(category);
                 break;
-            case "price":
-                System.out.println("Please enter minimum price: ");
+            case "preis":
+                System.out.println("Bitte Mindestpreis eingeben: ");
                 double price = scanner.nextDouble();
                 predicate = product -> product.getPrice() >= price;
                 break;
-            case "quantity":
-                System.out.println("Please enter minimum quantity: ");
+            case "anzahl":
+                System.out.println("Bitte Mindestanzahl eingeben: ");
                 int quantity = scanner.nextInt();
                 predicate = product -> product.getQuantity() >= quantity;
                 break;
             default:
-                throw new IllegalArgumentException("Invalid filter");
+                throw new IllegalArgumentException("Ungultiger Filter-Typ.");
         }
         String filteredProducts = inventory.filterProducts(predicate).toString();
-        System.out.println("Filtered products: \n" + filteredProducts.toString());
+        System.out.println("Gefilterte Produkte: \n" + filteredProducts.toString());
     }
 
     /**
@@ -312,17 +312,17 @@ public class InventoryDialog {
             System.out.println(INVENTORY_EMPTY);
             return;
         }
-        System.out.println("Please enter percentage: ");
+        System.out.println("Bitte Prozentsatz eingeben: ");
         double percentage = scanner.nextDouble();
         inventory.applyToProducts(product -> product.setPrice(product.getPrice() * (1 + percentage / 100)));
-        System.out.println("Prices for all products changed by " + percentage + "%");
+        System.out.println("Preise aller Produkte wurden um " + percentage + "% geaendert.");
     }
 
     /**
      * Shuts down the program by printing a message, closing the scanner, and exiting the program with a status code of 0.
      */
     private void shutdownProgram () {
-        System.out.println("Exiting program.");
+        System.out.println("Programm wird beendet.");
         scanner.close();
         System.exit(0);
     }

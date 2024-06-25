@@ -10,15 +10,19 @@ public class MainClass {
       Scanner scanner = new Scanner(System.in);
       boolean useFifo;
 
-      System.out.print("Use FIFO queue? (y/n): ");
+      System.out.print("Soll FIFO verwendet werden? (y/n): ");
       String answer = scanner.next();
       if (answer.charAt(0) == 'y') {
          useFifo = true;
       } else {
          useFifo = false;
       }
-      System.out.println("Of which number should the number of occurrences be shown?");
+      System.out.println("Von welchem Wert soll die Anzahl der Wiederholungen angezeigt werden?");
       int number = scanner.nextInt();
+      if (number > 27) {
+         System.out.println("Die groesstmoegliche Quersumme ist 27.");
+         System.exit(1);
+      }
       scanner.close();
 
       Queue<Integer> queue;
@@ -41,15 +45,15 @@ public class MainClass {
             if (!queue.isEmpty()) {
                int value = queue.poll();
                consumer.consume(value);
-               System.out.println("Consumed: " + value + ", Cross total = " + consumer.calculateCrosstotal(value));
+               System.out.println("Consumed: " + value + ", Quersumme = " + consumer.calculateCrosstotal(value));
             }
          }
       }
       
-      System.out.println("Number of different results: " + consumer.numberOfDifferentResults());
-      System.out.println("Number of occurrences of " + number + ": " + consumer.numberOfOccurrences(number));
-      System.out.println("Cross totals ascending: " + consumer.getCrossTotalsAscending());
-      System.out.println("Cross totals descending: " + consumer.getCrossTotalDescending());
-      System.out.println("Timestamps for cross total "  + number +": " + consumer.getTimestamps(number));
+      System.out.println("Anzahl verschiedener Ergebnisse: " + consumer.numberOfDifferentResults());
+      System.out.println("Anzahl Vorkommen von " + number + ": " + consumer.numberOfOccurrences(number));
+      System.out.println("Quersummen aufsteigend: " + consumer.getCrossTotalsAscending());
+      System.out.println("Quersummen absteigend: " + consumer.getCrossTotalDescending());
+      System.out.println("Zeitangaben der Quersummen von "  + number +": " + consumer.getTimestamps(number));
    }  
 }
