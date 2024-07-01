@@ -264,7 +264,7 @@ public class Book implements Comparable<Book> {
         if (isBorrowed()) {
             sb.append("\nBuch ist aktuell ausgeliehen. \nRückgabedatum: " + getReturnDate());
         } else {
-            sb.append("\nAktuell nicht ausgeliehen");
+            sb.append("\nAktuell nicht ausgeliehen\n");
         }
         return sb.toString();
     }

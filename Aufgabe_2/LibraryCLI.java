@@ -3,6 +3,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Scanner;
 import java.util.function.Predicate;
 import java.io.BufferedReader;
@@ -125,77 +126,118 @@ public class LibraryCLI {
     }
 
     private void addBook() {
-        System.out.print("Titel: ");
+        System .out.print("Bitte Titel eingeben: ");    
         String title = scanner.nextLine();
-        System.out.print("Autor: ");
+        System.out.print("Bitte Autor eingeben: ");
         String author = scanner.nextLine();
-        System.out.print("Veröffentlichungsjahr: ");
+        System.out.print("Bitte Jahr eingeben: ");
         int year = scanner.nextInt();
-        System.out.print("Anzahl der Seiten: ");
+        scanner.nextLine(); // Consume newline
+        System.out.print("Bitte Seitenanzahl eingeben: ");
         int pages = scanner.nextInt();
-        System.out.print("Genre: ");
-        String genre = scanner.next();
-        System.out.print("Bewertung: ");
+        scanner.nextLine(); // Consume newline
+        System.out.print("Bitte Genre eingeben: ");
+        String genre = scanner.nextLine();
+        System.out.print("Bitte Bewertung eingeben: ");
         double rating = scanner.nextDouble();
-        scanner.nextLine();
-        Book book = new Book(title, author, year, pages, genre, rating);
-        libraryManagementSystem.addBook(book);
-        System.out.println("Buch hinzugefügt!");
+        scanner.nextLine(); // Consume newline
+        libraryManagementSystem.addBook(new Book(title, author, year, pages, genre, rating));
     }
 
     private void displayAllBooks() {
-        System.out.println("Alle Bücher:" + libraryManagementSystem.getBooks());
+        System.out.println(libraryManagementSystem.getBooks());
     }
 
     private void filterBooksByYear() {
-        System.out.print("Jahr: ");
+        System.out.println("Bücher nach Jahr filtern:");
+        System.out.println("Bitte Anfangsjahr eingeben: ");
         int year = scanner.nextInt();
-        System.out.println("Gefilterte Liste:" + libraryManagementSystem.filterBooksByYear(year));
+        System.out.println(libraryManagementSystem.filterBooksByYear(year));
+
     }
 
     private void sortBooksByPages() {
-        System.out.println("Bücher nach Anzahl der Seiten sortiert:" + libraryManagementSystem.sortBooksByPages());
+        System.out.println("Bücher sortiert nach Seitenanzahl:");
+        System.out.println(libraryManagementSystem.sortBooksByPages());
     }
 
     private void calculateTotalPages() {
-        System.out.println("Gesamtanzahl der Seiten:" + libraryManagementSystem.getNumberOfCombinedPages());
+        System.out.println("Gesamtanzahl der Seiten aller Bücher: " + libraryManagementSystem.getTotalPages());  
     }
 
     private void borrowBook() {
-        System.out.print("Nutzer-ID: ");
-        String userId = scanner.nextLine();
-        for (int i = 0; i < libraryManagementSystem.getBooks().size(); i++) {
-            System.out.println((i + 1) + ". " + libraryManagementSystem.getBooks().get(i).getTitle());
+        System.out.print("Bitte Nutzer-ID eingeben: ");
+        String readerID = scanner.nextLine();
+        User user = libraryManagementSystem.findUserByID(readerID);
+        if (user == null) {
+            System.out.print("Bitte Nutzernamen eingeben: ");
+            String name = scanner.nextLine();
+            user = new User(name, readerID);
+            libraryManagementSystem.addUser(user);
+            System.out.print("Neuer Nutzer angelegt: " + user);
         }
-        System.out.print("Bitte Nummer des gewählten Buches eingeben: ");
-        int bookIndex = scanner.nextInt();
-        libraryManagementSystem.borrowBook(userId, libraryManagementSystem.getBooks().get(bookIndex - 1));
+        System.out.print("Bitte Buchtitel eingeben: ");
+        String title = scanner.nextLine();
+        Book book = libraryManagementSystem.findBookByTitle(title);
+        if  (book != null && !book.isBorrowed()) {
+            user.borrowBook(book);
+            libraryManagementSystem.addBorowedBook(book);
+            System.out.println("Buch erfolgreich ausgeliehen.");
+        } else if (book == null) {
+            System.out.println("Kein Buch mit diesem Titel gefunden.");
+        } else {
+            System.out.println("Dieses Buch ist bereits ausgeliehen.");
+        }
     }
 
     private void returnBook() {
-        
-
+        System.out.println(libraryManagementSystem.getBooks());
+        System.out.println("Bitte Titel des ausgeliehenden Buches eingeben:");
+        String title = scanner.nextLine();
+        for (Book book : libraryManagementSystem.getBooks()) {
+            if (book.isBorrowed() && book.getTitle().contains(title)) {
+                libraryManagementSystem.returnBook(book);
+            } else if (!book.isBorrowed()) {
+                System.out.println("Dieses Buch ist nicht ausgeliehen.");
+            }
+        }
     }
 
     private void displayBorrowedBooksByUser() {
+        System.out.println("Bitte ID des Nutzers eingeben:");
+        String readerID = scanner.nextLine();
+        System.out.println(libraryManagementSystem.getBooksBorrowedByUser(readerID));
     }
 
     private void displayAllBorrowedBooks() {
+        System.out.println("Alle ausgeliehenen Bücher:");
+        System.out.println(libraryManagementSystem.getBorrowedBooksByReturnDate());
     }
 
     private void filterBooksByGenre() {
+        System.out.println("Bitte wählen Sie ein Genre:");
+        String genre = scanner.nextLine();
+        System.out.println(libraryManagementSystem.filterBooksByGenre(genre));
     }
 
     private void calculateAverageRatingPerGenre() {
+        System.out.println("Durchschnittliche Bewertung pro Genre:");
+        System.out.println(libraryManagementSystem.getAverageRatingByGenre());
     }
 
     private void displayTopRatedBooks() {
+        System.out.println("Top-Bewertete Bücher:");
+        System.out.println(libraryManagementSystem.getTopRatedBooks());
     }
 
     private void displayAuthorsWithMostBooks() {
+        System.out.println("Autoren mit den meisten veröffentlichten Büchern:");
+        System.out.println(libraryManagementSystem.getAuthorsWithMostBooks());
     }
 
     private void sortBooksByRating() {
+        System.out.println("Bücher sortiert nach Bewertung:");
+        System.out.println(libraryManagementSystem.sortBooksByRating());
     }
 
     private void filterAndSortBooks() {
@@ -211,21 +253,22 @@ public class LibraryCLI {
         double filterValue = scanner.nextDouble();
         scanner.nextLine();  // Consume newline
 
-        /*Predicate<Book> filter;
+        Predicate<Book> filter;
         switch (filterChoice) {
             case 1:
-                filter = ...
+                filter = comparison == 1 ? book -> book.getYear() > filterValue : book -> book.getYear() < filterValue;
                 break;
             case 2:
-                filter = ...
+                filter = comparison == 1 ? book -> book.getPages() > filterValue : book -> book.getPages() < filterValue;
                 break;
             case 3:
-                filter = ...
+                filter = comparison == 1 ? book -> book.getRating() > filterValue : book -> book.getRating() < filterValue;
                 break;
             default:
                 System.out.println("Ungültige Auswahl.");
-                return; 
+                return;
         }
+    
 
         System.out.println("Sortieren nach benutzerdefinierten Kriterien:");
         System.out.println("1. Nach Titel");
@@ -239,16 +282,16 @@ public class LibraryCLI {
         Comparator<Book> sorter;
         switch (sortChoice) {
             case 1:
-                sorter = ...
+                sorter = Comparator.comparing(Book::getTitle);
                 break;
             case 2:
-                sorter = ...
+                sorter = Comparator.comparingInt(Book::getYear);
                 break;
             case 3:
-                sorter = ...
+                sorter = Comparator.comparingInt(Book::getPages);
                 break;
             case 4:
-                sorter = ...                              
+                sorter = Comparator.comparingDouble(Book::getRating);
                 break;
             default:
                 System.out.println("Ungültige Auswahl.");
@@ -256,7 +299,7 @@ public class LibraryCLI {
         }
 
         List<Book> result = libraryManagementSystem.filterAndSortBooks(filter, sorter);
-        result.forEach(System.out::println);*/
+        result.forEach(System.out::println);
     }
 
     public static void main(String[] args) {

@@ -3,6 +3,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -19,7 +20,7 @@ public class LibraryManagementSystem {
     }
 
     public void addUser (User user) {
-        users.put(user.getReaderID(), user);
+        users.putIfAbsent(user.getReaderID(), user);
     }
 
     public void addBook (Book book) {
@@ -65,7 +66,7 @@ public class LibraryManagementSystem {
         return sortedBooks;
     }
 
-    public int getNumberOfCombinedPages () {
+    public int getTotalPages () {
         return books.stream()
             .mapToInt(Book::getPages)
             .sum();
@@ -107,21 +108,35 @@ public class LibraryManagementSystem {
             .toList();
     }
 
-    public List<Book> getFilteredAndSortedBooks(Predicate<Book> filter, Comparator<Book> sorter) {
+    public List<Book> filterAndSortBooks (Predicate<Book> filter, Comparator<Book> sorter) {
         return books.stream()
                 .filter(filter)
                 .sorted(sorter)
                 .collect(Collectors.toList());
     }
 
-    public List<Book> getBooks () {
-        return books.stream()
-            .toList();
+    public Set<Book> getBooks () {
+        return books;
     }
 
     public List<User> getUsers () {
         return users.values()
             .stream()
             .toList();
+    }
+
+    public User findUserByID (String readerID) {
+        return users.get(readerID);
+    }
+
+    public Book findBookByTitle (String title) {
+        return books.stream()
+            .filter(book -> book.getTitle().equals(title))
+            .findFirst()
+            .orElse(null);
+    }   
+
+    public void addBorowedBook(Book book) {
+        borrowedBooksByReturnDate.add(book);
     }
 }
