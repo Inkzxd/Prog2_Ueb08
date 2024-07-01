@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.Comparator;
 import java.util.Scanner;
 import java.util.function.Predicate;
@@ -21,7 +22,8 @@ public class LibraryCLI {
     }
 
     public void run() {
-        loadBooksFromCSV("C:\\Users\\Christian\\Documents\\Programmieren-2\\Aufgabe_2\\books.csv");
+        String currentPath = System.getProperty("user.dir");
+        loadBooksFromCSV(Paths.get(currentPath,  "Aufgabe_2", "books.csv").toString());
 
         boolean running = true;
 

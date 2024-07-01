@@ -9,8 +9,8 @@ import java.util.stream.Collectors;
 
 public class LibraryManagementSystem {
     private Set<Book> books;
-    private Map<String, User> users;
     private Set<Book> borrowedBooksByReturnDate;
+    private Map<String, User> users;
 
     public LibraryManagementSystem () {
         this.books = new TreeSet<>(Comparator.comparing(Book::getTitle));
@@ -30,7 +30,13 @@ public class LibraryManagementSystem {
         User user = users.get(readerID);
         if (user != null) {
             user.borrowBook(book);
+            borrowedBooksByReturnDate.add(book);
         }
+    }
+
+    public void returnBook (Book book) {
+        borrowedBooksByReturnDate.remove(book);
+        book.setBorrowedStatus(false);
     }
 
     public Set<Book> getBooksBorrowedByUser (String readerID) {
