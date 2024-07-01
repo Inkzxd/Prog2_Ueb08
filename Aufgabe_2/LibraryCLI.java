@@ -6,10 +6,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 import java.util.function.Predicate;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.Scanner;
+
 
 
 
@@ -176,13 +173,14 @@ public class LibraryCLI {
             libraryManagementSystem.addUser(user);
             System.out.print("Neuer Nutzer angelegt: " + user);
         }
-        System.out.print("Bitte Buchtitel eingeben: ");
-        String title = scanner.nextLine();
+        System.out.print("\nBitte Buchtitel eingeben: ");
+        String title = scanner.nextLine().toLowerCase();
         Book book = libraryManagementSystem.findBookByTitle(title);
         if  (book != null && !book.isBorrowed()) {
+            System.out.println("Buch\n" + book + "\nerfolgreich ausgeliehen.");
             user.borrowBook(book);
             libraryManagementSystem.addBorowedBook(book);
-            System.out.println("Buch erfolgreich ausgeliehen.");
+            System.out.println("Rückgabedatum: " + book.getReturnDate());
         } else if (book == null) {
             System.out.println("Kein Buch mit diesem Titel gefunden.");
         } else {
@@ -232,7 +230,7 @@ public class LibraryCLI {
 
     private void displayAuthorsWithMostBooks() {
         System.out.println("Autoren mit den meisten veröffentlichten Büchern:");
-        System.out.println(libraryManagementSystem.getAuthorsWithMostBooks());
+        System.out.println(libraryManagementSystem.getAuthorsMostBooks());
     }
 
     private void sortBooksByRating() {

@@ -65,21 +65,12 @@ public class User {
     public String toString () {
         StringBuilder sb = new StringBuilder();
         sb.append("Name: " + getName() + ", ID: " + getReaderID());
-        if (borrowedBooks.isEmpty()) {
-            sb.append("\nKeine Bücher ausgeliehen");
-        } else {
+        if (!borrowedBooks.isEmpty()) {
             sb.append("\nAusgeliehene Bücher:");
             for (Book book : borrowedBooks) {
                 sb.append("\n" + book);
             }
         }
         return sb.toString();
-    }
-
-    public static void main(String[] args) {
-        User user = new User("Christian", "12345678");
-        Book book = new Book("The Lord of the Rings", "J.R.R. Tolkien", 1954, 295, "Fantasy", 4.0);
-        user.borrowBook(book);
-        System.out.println(user);
     }
 }

@@ -263,8 +263,6 @@ public class Book implements Comparable<Book> {
         sb.append("Titel: " + getTitle() + ", Autor: " + getAuthor() + "\nVeröffentlichungsjahr: " + getYear() + ", Anzahl der Seiten: " + getPages() + "\nGenre: " + getGenre() + ", Bewertung: " + getRating());
         if (isBorrowed()) {
             sb.append("\nBuch ist aktuell ausgeliehen. \nRückgabedatum: " + getReturnDate());
-        } else {
-            sb.append("\nAktuell nicht ausgeliehen\n");
         }
         return sb.toString();
     }

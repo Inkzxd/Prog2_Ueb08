@@ -3,12 +3,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.text.DecimalFormat;
 
 public class LibraryManagementSystem {
+    private static final DecimalFormat df = new DecimalFormat("0.00");
     private Set<Book> books;
     private Set<Book> borrowedBooksByReturnDate;
     private Map<String, User> users;
@@ -55,6 +56,7 @@ public class LibraryManagementSystem {
     public List<Book> filterBooksByYear (int year) {
         List<Book> filteredBooks = books.stream()
             .filter(book -> book.getYear() > year)
+            .sorted(Comparator.comparing(Book::getYear))
             .toList();
         return filteredBooks;
     }
@@ -79,9 +81,16 @@ public class LibraryManagementSystem {
         return filteredBooks;
     }
 
-    public Map<String, Double> getAverageRatingByGenre () {
+    public Map<String, String> getAverageRatingByGenre () {
         return books.stream()
-            .collect(Collectors.groupingBy(Book::getGenre, Collectors.averagingDouble(Book::getRating)));
+            .collect(Collectors.groupingBy(Book::getGenre, Collectors.averagingDouble(Book::getRating)))
+            .entrySet()
+            .stream()
+            .collect(Collectors.toMap(
+                Map.Entry::getKey,
+                e -> df.format(e.getValue()),
+                (oldValue, newValue) -> oldValue
+            ));
     }   
 
     public List<Book> getTopRatedBooks () {
@@ -91,7 +100,7 @@ public class LibraryManagementSystem {
             .toList();
     }
 
-    public List<String> getAuthorsWithMostBooks (){
+    public List<String> getAuthorsMostBooks (){
         return books.stream()
             .collect(Collectors.groupingBy(Book::getAuthor, Collectors.counting()))
             .entrySet()
@@ -131,7 +140,7 @@ public class LibraryManagementSystem {
 
     public Book findBookByTitle (String title) {
         return books.stream()
-            .filter(book -> book.getTitle().equals(title))
+            .filter(book -> book.getTitle().toLowerCase().equals(title))
             .findFirst()
             .orElse(null);
     }   
