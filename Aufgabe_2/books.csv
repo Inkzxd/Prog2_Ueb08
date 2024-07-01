@@ -1,0 +1,73 @@
+title,author,year,pages,genre,rating
+1984,George Orwell,1949,328,Dystopian,4.5
+The Hobbit,J.R.R. Tolkien,1937,310,Fantasy,4.7
+The Great Gatsby,F. Scott Fitzgerald,1925,180,Classic,4.2
+Clean Code,Robert C. Martin,2008,464,Technical,4.8
+Design Patterns,Erich Gamma,1994,395,Technical,4.5
+Introduction to Algorithms,Thomas H. Cormen,2009,1312,Technical,4.4
+The Pragmatic Programmer,Andrew Hunt,1999,352,Technical,4.7
+Code Complete,Steve McConnell,2004,960,Technical,4.6
+Refactoring: Improving the Design of Existing Code,Martin Fowler,1999,448,Technical,4.5
+The Mythical Man-Month,Frederick P. Brooks Jr.,1975,322,Technical,4.3
+Neuromancer,William Gibson,1984,271,Science Fiction,4.2
+Snow Crash,Neal Stephenson,1992,470,Science Fiction,4.3
+Cryptonomicon,Neal Stephenson,1999,918,Science Fiction,4.4
+Ready Player One,Ernest Cline,2011,384,Science Fiction,4.6
+The Hitchhiker's Guide to the Galaxy,Douglas Adams,1979,224,Science Fiction,4.7
+The Restaurant at the End of the Universe,Douglas Adams,1980,208,Science Fiction,4.6
+Mostly Harmless,Douglas Adams,1992,240,Science Fiction,4.4
+Dirk Gently's Holistic Detective Agency,Douglas Adams,1987,247,Science Fiction,4.3
+The Long Dark Tea-Time of the Soul,Douglas Adams,1988,256,Science Fiction,4.2
+The Salmon of Doubt,Douglas Adams,2002,336,Science Fiction,4.3
+The Fellowship of the Ring,J.R.R. Tolkien,1954,423,Fantasy,4.8
+The Two Towers,J.R.R. Tolkien,1954,352,Fantasy,4.8
+The Return of the King,J.R.R. Tolkien,1955,416,Fantasy,4.9
+The Silmarillion,J.R.R. Tolkien,1977,365,Fantasy,4.5
+Unfinished Tales,J.R.R. Tolkien,1980,472,Fantasy,4.4
+Faust,Johann Wolfgang von Goethe,1808,158,Classic,4.6
+Homo Faber,Max Frisch,1957,192,Classic,4.4
+Die Physiker,Friedrich Dürrenmatt,1962,112,Classic,4.5
+Ringworld,Larry Niven,1970,342,Science Fiction,4.3
+Traumnovelle,Arthur Schnitzler,1926,120,Classic,4.2
+Die unerträgliche Leichtigkeit des Seins,Milan Kundera,1984,320,Classic,4.3
+Deutschstunde,Siegfried Lenz,1968,728,Classic,4.4
+Der dritte Mann,Graham Greene,1950,160,Classic,4.1
+Siddhartha,Hermann Hesse,1922,152,Classic,4.5
+Steppenwolf,Hermann Hesse,1927,237,Classic,4.4
+Catch-22,Joseph Heller,1961,453,Classic,4.2
+Kill Your Friends,John Niven,2008,342,Satire,4.0
+The Second Coming,John Niven,2011,400,Satire,4.1
+Straight White Male,John Niven,2013,384,Satire,4.2
+Atomised,Michel Houellebecq,1998,368,Fiction,4.1
+Platform,Michel Houellebecq,2001,276,Fiction,4.0
+Submission,Michel Houellebecq,2015,272,Fiction,3.9
+The Map and the Territory,Michel Houellebecq,2010,336,Fiction,4.0
+Carrie,Stephen King,1974,199,Horror,4.0
+The Shining,Stephen King,1977,447,Horror,4.5
+It,Stephen King,1986,1138,Horror,4.2
+The Dark Tower: The Gunslinger,Stephen King,1982,224,Fantasy,4.1
+Misery,Stephen King,1987,320,Horror,4.2
+Buddenbrooks,Thomas Mann,1901,736,Classic,4.3
+Der Zauberberg,Thomas Mann,1924,1006,Classic,4.4
+Lotte in Weimar,Thomas Mann,1939,576,Classic,4.1
+Der Untertan,Heinrich Mann,1918,448,Classic,4.3
+Professor Unrat,Heinrich Mann,1905,198,Classic,4.2
+A Game of Thrones,George R.R. Martin,1996,694,Fantasy,4.8
+A Clash of Kings,George R.R. Martin,1998,768,Fantasy,4.7
+A Storm of Swords,George R.R. Martin,2000,973,Fantasy,4.8
+A Feast for Crows,George R.R. Martin,2005,753,Fantasy,4.6
+A Dance with Dragons,George R.R. Martin,2011,1056,Fantasy,4.7
+Domain-Driven Design,Eric Evans,2003,560,Technical,4.5
+Refactoring to Patterns,Joshua Kerievsky,2004,400,Technical,4.4
+The Clean Coder,Robert C. Martin,2011,256,Technical,4.6
+Clean Architecture,Robert C. Martin,2017,432,Technical,4.7
+The Tin Drum,Günther Grass,1959,600,Classic,4.3
+Cat and Mouse,Günther Grass,1961,192,Classic,4.2
+Dog Years,Günther Grass,1963,592,Classic,4.1
+Kafka on the Shore,Franz Kafka,2002,505,Fiction,4.3
+The Trial,Franz Kafka,1925,255,Classic,4.2
+The Metamorphosis,Franz Kafka,1915,201,Classic,4.3
+Das Kapital,Karl Marx,1867,1184,Economics,4.4
+Nobody's Fool,Richard Russo,1993,560,Fiction,4.4
+Empire Falls,Richard Russo,2001,483,Fiction,4.5
+Straight Man,Richard Russo,1997,391,Fiction,4.3
