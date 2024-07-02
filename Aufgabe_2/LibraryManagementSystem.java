@@ -14,20 +14,35 @@ public class LibraryManagementSystem {
     private Set<Book> borrowedBooksByReturnDate;
     private Map<String, User> users;
 
+    /**
+     * Konstruktor der eine neue Instanz der Klasse LibraryManagementSystem erstellt
+     */
     public LibraryManagementSystem () {
         this.books = new TreeSet<>(Comparator.comparing(Book::getTitle));
         this.users = new HashMap<>();
         this.borrowedBooksByReturnDate = new TreeSet<>(Comparator.comparing(Book::getReturnDate));
     }
 
+    /**
+     * Fuegt einen Nutzer hinzu, falls er noch nicht existiert
+     * Wird in der Map gespeichert und mit seiner readerID verknuepft
+     * @param user Nutzer, der hinzugefuegt werden soll
+     */
     public void addUser (User user) {
         users.putIfAbsent(user.getReaderID(), user);
     }
 
+    /**
+     * Fuegt ein Buch hinzu
+     * @param book hinzuzufuegendes Buch
+     */
     public void addBook (Book book) {
         books.add(book);
     }
 
+    /**
+     * 
+     */
     public void borrowBook (String readerID, Book book) {
         User user = users.get(readerID);
         if (user != null) {
@@ -77,6 +92,7 @@ public class LibraryManagementSystem {
     public List<Book> filterBooksByGenre (String genre) {
         List<Book> filteredBooks = books.stream()
             .filter(book -> book.getGenre().equals(genre))
+            .sorted(Comparator.comparing(Book::getYear))
             .toList();
         return filteredBooks;
     }
@@ -148,4 +164,6 @@ public class LibraryManagementSystem {
     public void addBorowedBook(Book book) {
         borrowedBooksByReturnDate.add(book);
     }
+
+    
 }

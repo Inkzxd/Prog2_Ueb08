@@ -46,7 +46,7 @@ public class LibraryCLI {
             System.out.print("Bitte wählen Sie eine Option: ");
 
             int choice = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+            scanner.nextLine(); 
 
             switch (choice) {
                 case 1:
@@ -129,15 +129,15 @@ public class LibraryCLI {
         String author = scanner.nextLine();
         System.out.print("Bitte Jahr eingeben: ");
         int year = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
+        scanner.nextLine(); 
         System.out.print("Bitte Seitenanzahl eingeben: ");
         int pages = scanner.nextInt();
-        scanner.nextLine(); // Consume newline
+        scanner.nextLine(); 
         System.out.print("Bitte Genre eingeben: ");
         String genre = scanner.nextLine();
         System.out.print("Bitte Bewertung eingeben: ");
         double rating = scanner.nextDouble();
-        scanner.nextLine(); // Consume newline
+        scanner.nextLine(); 
         libraryManagementSystem.addBook(new Book(title, author, year, pages, genre, rating));
     }
 
@@ -147,7 +147,7 @@ public class LibraryCLI {
 
     private void filterBooksByYear() {
         System.out.println("Bücher nach Jahr filtern:");
-        System.out.println("Bitte Anfangsjahr eingeben: ");
+        System.out.print("Bitte Anfangsjahr eingeben: ");
         int year = scanner.nextInt();
         System.out.println(libraryManagementSystem.filterBooksByYear(year));
 
@@ -178,8 +178,7 @@ public class LibraryCLI {
         Book book = libraryManagementSystem.findBookByTitle(title);
         if  (book != null && !book.isBorrowed()) {
             System.out.println("Buch\n" + book + "\nerfolgreich ausgeliehen.");
-            user.borrowBook(book);
-            libraryManagementSystem.addBorowedBook(book);
+            libraryManagementSystem.borrowBook(readerID, book);
             System.out.println("Rückgabedatum: " + book.getReturnDate());
         } else if (book == null) {
             System.out.println("Kein Buch mit diesem Titel gefunden.");
@@ -189,21 +188,30 @@ public class LibraryCLI {
     }
 
     private void returnBook() {
-        System.out.println(libraryManagementSystem.getBooks());
-        System.out.println("Bitte Titel des ausgeliehenden Buches eingeben:");
+        if (libraryManagementSystem.getBorrowedBooksByReturnDate().isEmpty()) {
+            System.out.println("Aktuell sind keine Bücher ausgeliehen.");
+            return;
+        }
+        System.out.println(libraryManagementSystem.getBorrowedBooksByReturnDate());
+        System.out.print("Bitte Titel des ausgeliehenden Buches eingeben:");
         String title = scanner.nextLine();
-        for (Book book : libraryManagementSystem.getBooks()) {
-            if (book.isBorrowed() && book.getTitle().contains(title)) {
+        Book book  = libraryManagementSystem.findBookByTitle(title);
+        while (libraryManagementSystem.getBorrowedBooksByReturnDate().iterator().hasNext()) {
+            if (libraryManagementSystem.getBorrowedBooksByReturnDate().iterator().next().getTitle().equals(title)) {
                 libraryManagementSystem.returnBook(book);
-            } else if (!book.isBorrowed()) {
+                System.out.println("Buch erfolgreich ausgeliehen.");
+                return;
+            } else if (!libraryManagementSystem.getBorrowedBooksByReturnDate().iterator().hasNext()) {
                 System.out.println("Dieses Buch ist nicht ausgeliehen.");
             }
         }
     }
+    
 
     private void displayBorrowedBooksByUser() {
-        System.out.println("Bitte ID des Nutzers eingeben:");
-        String readerID = scanner.nextLine();
+        System.out.print("Bitte ID des Nutzers eingeben:");
+        String readerID = scanner.next();
+        scanner.nextLine();
         System.out.println(libraryManagementSystem.getBooksBorrowedByUser(readerID));
     }
 
@@ -213,7 +221,7 @@ public class LibraryCLI {
     }
 
     private void filterBooksByGenre() {
-        System.out.println("Bitte wählen Sie ein Genre:");
+        System.out.print("Bitte wählen Sie ein Genre:");
         String genre = scanner.nextLine();
         System.out.println(libraryManagementSystem.filterBooksByGenre(genre));
     }
@@ -249,7 +257,7 @@ public class LibraryCLI {
         int comparison = scanner.nextInt();
         System.out.print("Geben Sie den Wert ein: ");
         double filterValue = scanner.nextDouble();
-        scanner.nextLine();  // Consume newline
+        scanner.nextLine();  
 
         Predicate<Book> filter;
         switch (filterChoice) {
@@ -275,7 +283,7 @@ public class LibraryCLI {
         System.out.println("4. Nach Bewertung");
         System.out.print("Wählen Sie ein Sortierkriterium: ");
         int sortChoice = scanner.nextInt();
-        scanner.nextLine();  // Consume newline
+        scanner.nextLine();  
 
         Comparator<Book> sorter;
         switch (sortChoice) {
